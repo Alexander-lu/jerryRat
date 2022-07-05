@@ -1,6 +1,8 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 public class JerryRat implements Runnable {
@@ -24,19 +26,33 @@ public class JerryRat implements Runnable {
                 while (s != null) {
                     String[] s1 = s.split(" ");
                     String s2 = s1[1];
-                    File file = new File("res/webroot" + s2);
+                    String pathname = "res/webroot" + s2;
+                    File file = new File(pathname);
                     if (file.isDirectory()) {
-                        Scanner scanner = new Scanner(new File("res/webroot" + s2 + "/index.html"));
-                        while (scanner.hasNext()) {
-                            out.println(scanner.nextLine());
-                        }
-                    } else {
-                        Scanner scanner = new Scanner(file);
-                        while (scanner.hasNext()) {
-                            out.println(scanner.nextLine());
-                        }
+                        pathname = "res/webroot" + s2 + "/index.html";
                     }
-
+                    String outWords = "";
+                    FileReader fr = new FileReader(pathname);
+                    char[] chs = new char[1024];
+                    int readLine = 0;
+                    int len;
+                    while ((len = fr.read(chs))!=-1) {
+                        readLine +=len;
+                        outWords+=new String(chs,0,len);
+                    }
+                    out.println("HTTP/1.0 200,OK");
+                    SimpleDateFormat sdf =   new SimpleDateFormat( " yyyy-MM-dd HH:mm:ss " );
+                    String str = sdf.format(new Date());
+                    out.println("Date:"+str+" GMT");
+                    out.println("server:JerryRat/1.0");
+                    out.println("Content-Length="+readLine);
+                    out.println("Content-Type: "+"text/html;"+"charset=UTF-8");
+                    File fileLastTime = new File(pathname);
+                    long l = fileLastTime.lastModified();
+                    String lastTime = sdf.format(new Date(l));
+                    out.println("Last-Modified="+lastTime + " GMT");
+                    out.println(outWords);
+                    fr.close();
                     s = in.readLine();
                 }
             } catch (IOException e) {
