@@ -23,12 +23,23 @@ public class JerryRat implements Runnable {
             while (s!=null) {
                 String[] s1 = s.split(" ");
                 String s2 = s1[1];
-                Scanner scanner = new Scanner(new File("res/webroot" + s2));
-                String a = scanner.nextLine();
-                while (scanner.hasNext()) {
-                    a += scanner.nextLine();
+                File file = new File("res/webroot" + s2);
+                if (!file.exists()) {
+                    Scanner scanner = new Scanner(new File("res/webroot" + s2+"/index.html"));
+                    String a = scanner.nextLine();
+                    while (scanner.hasNext()) {
+                        a += scanner.nextLine();
+                    }
+                    out.println(a);
+                }else{
+                    Scanner scanner = new Scanner(file);
+                    String a = scanner.nextLine();
+                    while (scanner.hasNext()) {
+                        a += scanner.nextLine();
+                    }
+                    out.println(a);
                 }
-                out.println(a);
+
                 s = in.readLine();
             }
     } catch (IOException e) {
