@@ -61,45 +61,45 @@ public class JerryRat implements Runnable {
         new Thread(jerryRat).run();
     }
     public void response (PrintWriter out,int readLine,String pathname,String outWords,String fileHouZuiR){
-        out.println("Status-Code=200");
+        out.println("HTTP/1.0 200 OK");
         SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.ENGLISH);
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         String str = sdf.format(new Date());
-        out.println(str);
+        out.println("Expries: "+str);
         out.println("Server: Apache/0.8.4");
-        out.println("Content-Length="+readLine);
+        out.println("Content-Length: "+readLine);
         switch (fileHouZuiR){
             case "gif":
-                out.println("Content-Type: "+"image/gif;"+"charset=UTF-8");
+                out.println("Content-Type: "+"image/gif");
                 break;
             case "json":
-                out.println("Content-Type: "+"application/json;"+"charset=UTF-8");
+                out.println("Content-Type: "+"application/json");
                 break;
             case "word":
-                out.println("Content-Type: "+"application/msword;"+"charset=UTF-8");
+                out.println("Content-Type: "+"application/msword");
                 break;
             case "pdf":
-                out.println("Content-Type: "+"application/pdf;"+"charset=UTF-8");
+                out.println("Content-Type: "+"application/pdf");
                 break;
             case "png":
-                out.println("Content-Type: "+"image/png;"+"charset=UTF-8");
+                out.println("Content-Type: "+"image/png");
                 break;
             case "txt":
-                out.println("Content-Type: "+"text/html;"+"charset=UTF-8");
+                out.println("Content-Type: "+"text/plain");
                 break;
             case "jpg":
-                out.println("Content-Type: "+"image/jpeg;"+"charset=UTF-8");
+                out.println("Content-Type: "+"image/jpeg");
                 break;
             case "html":
-                out.println("Content-Type: "+"text/html;"+"charset=UTF-8");
+                out.println("Content-Type: "+"text/html");
                 break;
             default:
-                out.println("Content-Type: "+"text/html;"+"charset=UTF-8");
+                out.println("Content-Type: "+"text/plain");
                 break;
         }
         File fileLastTime = new File(pathname);
         long l = fileLastTime.lastModified();
-        out.println("Last-Modified="+sdf.format(new Date(l)));
+        out.println("Last-Modified: "+sdf.format(new Date(l)));
         out.println(outWords);
     }
 }
