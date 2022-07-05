@@ -4,7 +4,9 @@ import java.net.Socket;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Scanner;
+import java.util.TimeZone;
 
 public class JerryRat implements Runnable {
     public static final String SERVER_PORT = "8080";
@@ -61,10 +63,11 @@ public class JerryRat implements Runnable {
         new Thread(jerryRat).run();
     }
     public void response (PrintWriter out,int readLine,String pathname,String outWords,String fileHouZuiR){
-        out.println("HTTP/1.0 200,OK");
-        SimpleDateFormat sdf = new SimpleDateFormat( " E yyyy-MM-dd HH:mm:ss " );
+        out.println("Status-Code=200");
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.ENGLISH);
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         String str = sdf.format(new Date());
-        out.println(new Date().toGMTString());
+        out.println(str);
         out.println("server:JerryRat/1.0");
         out.println("Content-Length="+readLine);
         switch (fileHouZuiR){
@@ -86,7 +89,7 @@ public class JerryRat implements Runnable {
         }
         File fileLastTime = new File(pathname);
         long l = fileLastTime.lastModified();
-        out.println("Last-Modified="+new Date(l).toGMTString());
+        out.println("Last-Modified="+sdf.format(new Date(l)));
         out.println(outWords);
     }
 }
