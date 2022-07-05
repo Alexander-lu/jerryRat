@@ -29,7 +29,7 @@ public class JerryRat implements Runnable {
                     String s2 = s1[1];
                     String pathname = "res/webroot" + s2;
                     File file = new File(pathname);
-                    long length = file.length();
+//                    long length = file.length();
                     String fileHouZuiR="";
                     if (file.isDirectory()) {
                         pathname = "res/webroot" + s2 + "/index.html";
