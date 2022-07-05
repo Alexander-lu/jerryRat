@@ -32,6 +32,7 @@ public class JerryRat implements Runnable {
                     String fileHouZuiR = fileHouZui.substring(fileHouZui.lastIndexOf("." + 1));
                     if (file.isDirectory()) {
                         pathname = "res/webroot" + s2 + "/index.html";
+                        fileHouZuiR = "html";
                     }
                     String outWords = "";
                     FileReader fr = new FileReader(pathname);
@@ -72,6 +73,9 @@ public class JerryRat implements Runnable {
                 break;
             case "jpeg":
                 out.println("Content-Type: "+"image/JPEG;"+"charset=UTF-8");
+                break;
+            case "html":
+                out.println("Content-Type: "+"text/html;"+"charset=UTF-8");
                 break;
             default:
                 out.println("Content-Type: "+"text/html;"+"charset=UTF-8");
