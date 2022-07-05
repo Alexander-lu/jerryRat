@@ -14,36 +14,34 @@ public class JerryRat implements Runnable {
 
     @Override
     public void run() {
-        try (
-                Socket clientSocket = serverSocket.accept();
-                PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-                BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        ) {
-            String s = in.readLine();
-            while (s!=null) {
-                String[] s1 = s.split(" ");
-                String s2 = s1[1];
-                File file = new File("res/webroot" + s2);
-                if (!file.exists()) {
-                    Scanner scanner = new Scanner(new File("res/webroot" + s2+"/index.html"));
-                    String a = scanner.nextLine();
-                    while (scanner.hasNext()) {
-                        a += scanner.nextLine();
+        while(true) {
+            try (
+                    Socket clientSocket = serverSocket.accept();
+                    PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+                    BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            ) {
+                String s = in.readLine();
+                while (s != null) {
+                    String[] s1 = s.split(" ");
+                    String s2 = s1[1];
+                    File file = new File("res/webroot" + s2);
+                    if (!file.exists()) {
+                        Scanner scanner = new Scanner(new File("res/webroot" + s2 + "/index.html"));
+                        while (scanner.hasNext()) {
+                            out.println(scanner.nextLine());
+                        }
+                    } else {
+                        Scanner scanner = new Scanner(file);
+                        while (scanner.hasNext()) {
+                            out.println(scanner.nextLine());
+                        }
                     }
-                    out.println(a);
-                }else{
-                    Scanner scanner = new Scanner(file);
-                    String a = scanner.nextLine();
-                    while (scanner.hasNext()) {
-                        a += scanner.nextLine();
-                    }
-                    out.println(a);
-                }
 
-                s = in.readLine();
+                    s = in.readLine();
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-    } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 
