@@ -95,7 +95,7 @@ public class JerryRat implements Runnable {
                 break;
         }
         out.println("Content-Length: "+readLine);
-        out.println("Expries: "+str);
+        out.println("Date: "+str);
         File fileLastTime = new File(pathname);
         long l = fileLastTime.lastModified();
         out.println("Last-Modified: "+sdf.format(new Date(l)));
