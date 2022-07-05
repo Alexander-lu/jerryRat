@@ -66,7 +66,7 @@ public class JerryRat implements Runnable {
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         String str = sdf.format(new Date());
         out.println(str);
-        out.println("server:JerryRat/1.0");
+        out.println("Server: Apache/0.8.4");
         out.println("Content-Length="+readLine);
         switch (fileHouZuiR){
             case "jpg":
