@@ -24,7 +24,7 @@ public class EchoServer implements Runnable {
             int cont = 0;
             while (s!=null) {
                 cont++;
-                out.println(cont+". "+"\n"+s);
+                out.println(cont+". "+s);
                 s = in.readLine();
             }
         } catch (IOException e) {
