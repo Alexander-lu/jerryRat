@@ -25,7 +25,7 @@ public class JerryRat implements Runnable {
                     String[] s1 = s.split(" ");
                     String s2 = s1[1];
                     File file = new File("res/webroot" + s2);
-                    if (!file.exists()) {
+                    if (file.isDirectory()) {
                         Scanner scanner = new Scanner(new File("res/webroot" + s2 + "/index.html"));
                         while (scanner.hasNext()) {
                             out.println(scanner.nextLine());
