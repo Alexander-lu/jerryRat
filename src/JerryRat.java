@@ -65,9 +65,6 @@ public class JerryRat implements Runnable {
         SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.ENGLISH);
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         String str = sdf.format(new Date());
-        out.println("Expries: "+str);
-        out.println("Server: Apache/0.8.4");
-        out.println("Content-Length: "+readLine);
         switch (fileHouZuiR){
             case "gif":
                 out.println("Content-Type: "+"image/gif");
@@ -97,9 +94,12 @@ public class JerryRat implements Runnable {
                 out.println("Content-Type: "+"text/plain");
                 break;
         }
+        out.println("Content-Length: "+readLine);
+        out.println("Expries: "+str);
         File fileLastTime = new File(pathname);
         long l = fileLastTime.lastModified();
         out.println("Last-Modified: "+sdf.format(new Date(l)));
+        out.println("Server: Apache/0.8.4");
         out.println(outWords);
     }
 }
