@@ -28,6 +28,8 @@ public class JerryRat implements Runnable {
                     String s2 = s1[1];
                     String pathname = "res/webroot" + s2;
                     File file = new File(pathname);
+                    String fileHouZui = file.getName();
+                    String fileHouZuiR = fileHouZui.substring(fileHouZui.lastIndexOf("." + 1));
                     if (file.isDirectory()) {
                         pathname = "res/webroot" + s2 + "/index.html";
                     }
@@ -40,18 +42,7 @@ public class JerryRat implements Runnable {
                         readLine +=len;
                         outWords+=new String(chs,0,len);
                     }
-                    out.println("HTTP/1.0 200,OK");
-                    SimpleDateFormat sdf =   new SimpleDateFormat( " yyyy-MM-dd HH:mm:ss " );
-                    String str = sdf.format(new Date());
-                    out.println("Date:"+str+" GMT");
-                    out.println("server:JerryRat/1.0");
-                    out.println("Content-Length="+readLine);
-                    out.println("Content-Type: "+"text/html;"+"charset=UTF-8");
-                    File fileLastTime = new File(pathname);
-                    long l = fileLastTime.lastModified();
-                    String lastTime = sdf.format(new Date(l));
-                    out.println("Last-Modified="+lastTime + " GMT");
-                    out.println(outWords);
+                    response(out,readLine,pathname,outWords,fileHouZuiR);
                     fr.close();
                     s = in.readLine();
                 }
@@ -64,5 +55,32 @@ public class JerryRat implements Runnable {
     public static void main(String[] args) throws IOException {
         JerryRat jerryRat = new JerryRat();
         new Thread(jerryRat).run();
+    }
+    public void response (PrintWriter out,int readLine,String pathname,String outWords,String fileHouZuiR){
+        out.println("HTTP/1.0 200,OK");
+        SimpleDateFormat sdf = new SimpleDateFormat( " yyyy-MM-dd HH:mm:ss " );
+        String str = sdf.format(new Date());
+        out.println("Date:"+str+"GMT");
+        out.println("server:JerryRat/1.0");
+        out.println("Content-Length="+readLine);
+        switch (fileHouZuiR){
+            case "jpg":
+                out.println("Content-Type: "+"image/GIF;"+"charset=UTF-8");
+                break;
+            case "txt":
+                out.println("Content-Type: "+"text/html;"+"charset=UTF-8");
+                break;
+            case "jpeg":
+                out.println("Content-Type: "+"image/JPEG;"+"charset=UTF-8");
+                break;
+            default:
+                out.println("Content-Type: "+"text/html;"+"charset=UTF-8");
+                break;
+        }
+        File fileLastTime = new File(pathname);
+        long l = fileLastTime.lastModified();
+        String lastTime = sdf.format(new Date(l));
+        out.println("Last-Modified="+lastTime + " GMT");
+        out.println(outWords);
     }
 }
