@@ -69,14 +69,26 @@ public class JerryRat implements Runnable {
         out.println("Server: Apache/0.8.4");
         out.println("Content-Length="+readLine);
         switch (fileHouZuiR){
-            case "jpg":
-                out.println("Content-Type: "+"image/GIF;"+"charset=UTF-8");
+            case "gif":
+                out.println("Content-Type: "+"image/gif;"+"charset=UTF-8");
+                break;
+            case "json":
+                out.println("Content-Type: "+"application/json;"+"charset=UTF-8");
+                break;
+            case "word":
+                out.println("Content-Type: "+"application/msword;"+"charset=UTF-8");
+                break;
+            case "pdf":
+                out.println("Content-Type: "+"application/pdf;"+"charset=UTF-8");
+                break;
+            case "png":
+                out.println("Content-Type: "+"image/png;"+"charset=UTF-8");
                 break;
             case "txt":
                 out.println("Content-Type: "+"text/html;"+"charset=UTF-8");
                 break;
-            case "jpeg":
-                out.println("Content-Type: "+"image/JPEG;"+"charset=UTF-8");
+            case "jpg":
+                out.println("Content-Type: "+"image/jpeg;"+"charset=UTF-8");
                 break;
             case "html":
                 out.println("Content-Type: "+"text/html;"+"charset=UTF-8");
