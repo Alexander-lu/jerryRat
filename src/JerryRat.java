@@ -1,11 +1,9 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Scanner;
 import java.util.TimeZone;
 
 public class JerryRat implements Runnable {
