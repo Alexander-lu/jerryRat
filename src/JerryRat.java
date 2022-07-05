@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
@@ -28,11 +29,13 @@ public class JerryRat implements Runnable {
                     String s2 = s1[1];
                     String pathname = "res/webroot" + s2;
                     File file = new File(pathname);
-                    String fileHouZui = file.getName();
-                    String fileHouZuiR = fileHouZui.substring(fileHouZui.lastIndexOf("." + 1));
+                    String fileHouZuiR="";
                     if (file.isDirectory()) {
                         pathname = "res/webroot" + s2 + "/index.html";
                         fileHouZuiR = "html";
+                    }else {
+                        String fileHouZui = file.getName();
+                        fileHouZuiR = fileHouZui.substring(fileHouZui.lastIndexOf(".")+1);
                     }
                     String outWords = "";
                     FileReader fr = new FileReader(pathname);
@@ -59,9 +62,9 @@ public class JerryRat implements Runnable {
     }
     public void response (PrintWriter out,int readLine,String pathname,String outWords,String fileHouZuiR){
         out.println("HTTP/1.0 200,OK");
-        SimpleDateFormat sdf = new SimpleDateFormat( " yyyy-MM-dd HH:mm:ss " );
+        SimpleDateFormat sdf = new SimpleDateFormat( " E yyyy-MM-dd HH:mm:ss " );
         String str = sdf.format(new Date());
-        out.println("Date:"+str+"GMT");
+        out.println(new Date().toGMTString());
         out.println("server:JerryRat/1.0");
         out.println("Content-Length="+readLine);
         switch (fileHouZuiR){
@@ -83,8 +86,7 @@ public class JerryRat implements Runnable {
         }
         File fileLastTime = new File(pathname);
         long l = fileLastTime.lastModified();
-        String lastTime = sdf.format(new Date(l));
-        out.println("Last-Modified="+lastTime + " GMT");
+        out.println("Last-Modified="+new Date(l).toGMTString());
         out.println(outWords);
     }
 }
