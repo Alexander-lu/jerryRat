@@ -56,17 +56,20 @@ public class JerryRat implements Runnable {
                                 case "xml":
                                     contentType = "application/atom+xml";
                                     break;
-                                case "js":
-                                    contentType = "application/javascript";
-                                    break;
                                 case "json":
                                     contentType = "application/json";
                                     break;
                                 case "doc":
                                     contentType = "application/msword";
                                     break;
+                                case "js":
+                                    contentType = "application/javascript";
+                                    break;
                                 case "css":
                                     contentType = "text/css";
+                                    break;
+                                case "html":
+                                    contentType = "text/html";
                                     break;
                                 case "jpg":
                                     contentType = "image/jpeg";
