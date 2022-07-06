@@ -42,6 +42,7 @@ public class JerryRat implements Runnable {
                             mimeType = connection.getContentType();
                         }
                         try {
+                            FileInputStream fr = new FileInputStream(pathname);
                             SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.ENGLISH);
                             sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
                             String str = sdf.format(new Date());
@@ -49,7 +50,6 @@ public class JerryRat implements Runnable {
                             long l = fileLastTime.lastModified();
                             long length = fileLastTime.length();
                             clientSocket.getOutputStream().write(("HTTP/1.0 200 OK"+"\r\n"+"Date: "+str+"\r\n"+"Server: Apache/0.8.4"+"\r\n"+"Content-Length: "+length+"\r\n"+"Content-Type: "+ mimeType+"\r\n"+"Last-Modified: "+sdf.format(new Date(l))+"\r\n"+"\r\n").getBytes());
-                            FileInputStream fr = new FileInputStream(pathname);
                             byte[] chs = new byte[1024];
                             int len;
                             while ((len = fr.read(chs))!=-1) {
