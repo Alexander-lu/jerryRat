@@ -80,6 +80,6 @@ public class JerryRat implements Runnable {
         String str = sdf.format(new Date());
         File fileLastTime = new File(pathname);
         long l = fileLastTime.lastModified();
-        out.println("HTTP/1.0 200 OK"+"\n\r"+"Date: "+str+"\n\r"+"Server: Apache/0.8.4"+"\n\r"+"Content-Length: "+readLine+"\n\r"+"Content-Type: "+ mimeType+"\n\r"+"Last-Modified: "+sdf.format(new Date(l))+"\n\r"+outWords);
+        out.println("HTTP/1.0 200 OK"+"\r\n"+"Date: "+str+"\r\n"+"Server: Apache/0.8.4"+"\r\n"+"Content-Length: "+readLine+"\r\n"+"Content-Type: "+ mimeType+"\r\n"+"Last-Modified: "+sdf.format(new Date(l))+"\r\n"+outWords);
     }
 }
