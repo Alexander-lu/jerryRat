@@ -27,7 +27,7 @@ public class JerryRat implements Runnable {
                 try {
                     s = in.readLine();
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
                 }
                 while (s != null) {
                     String[] s1 = s.split(" ");
