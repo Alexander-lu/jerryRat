@@ -115,7 +115,7 @@ public class JerryRat implements Runnable {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    }
+                    }else if (s.equals("")) {}
                     s = in.readLine();
                 }
             } catch (IOException e) {
