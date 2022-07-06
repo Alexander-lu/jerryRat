@@ -26,7 +26,8 @@ public class JerryRat implements Runnable {
             ) {
                 String s = in.readLine();
                 while (s != null) {
-                    if (!s.equals("")) {
+                    if (s.startsWith("Host")) {
+                    }else {   if (!s.equals("")) {
                         String[] s1 = s.split(" ");
                         String s2 = s1[1];
                         String pathname = "res/webroot" + s2;
@@ -43,54 +44,54 @@ public class JerryRat implements Runnable {
                         String contentType;
                         String s3 = split[1];
                         switch (s3){
-                                case "pdf":
-                                    contentType = "application/pdf";
-                                    break;
-                                case "ai":
-                                    contentType = "application/postscript";
-                                    break;
-                                case "xml":
-                                    contentType = "application/atom+xml";
-                                    break;
-                                case "json":
-                                    contentType = "application/json";
-                                    break;
-                                case "doc":
-                                    contentType = "application/msword";
-                                    break;
-                                case "js":
-                                    contentType = "application/javascript";
-                                    break;
-                                case "css":
-                                    contentType = "text/css";
-                                    break;
-                                case "html":
-                                    contentType = "text/html";
-                                    break;
-                                case "jpg":
-                                    contentType = "image/jpeg";
-                                    break;
-                                case "tiff":
-                                    contentType = "image/tiff";
-                                    break;
-                                case "gif":
-                                    contentType = "image/gif";
-                                    break;
-                                case "png":
-                                    contentType = "image/png";
-                                    break;
-                                case "jpeg":
-                                    contentType = "image/jpeg";
-                                    break;
-                                case "wbmp":
-                                    contentType = "image/vnd.wap.wbmp";
-                                    break;
-                                case "jpe":
-                                    contentType = "image/jpeg";
-                                    break;
-                                default:
-                                    contentType = "text/html";
-                                    break;
+                            case "pdf":
+                                contentType = "application/pdf";
+                                break;
+                            case "ai":
+                                contentType = "application/postscript";
+                                break;
+                            case "xml":
+                                contentType = "application/atom+xml";
+                                break;
+                            case "json":
+                                contentType = "application/json";
+                                break;
+                            case "doc":
+                                contentType = "application/msword";
+                                break;
+                            case "js":
+                                contentType = "application/javascript";
+                                break;
+                            case "css":
+                                contentType = "text/css";
+                                break;
+                            case "html":
+                                contentType = "text/html";
+                                break;
+                            case "jpg":
+                                contentType = "image/jpeg";
+                                break;
+                            case "tiff":
+                                contentType = "image/tiff";
+                                break;
+                            case "gif":
+                                contentType = "image/gif";
+                                break;
+                            case "png":
+                                contentType = "image/png";
+                                break;
+                            case "jpeg":
+                                contentType = "image/jpeg";
+                                break;
+                            case "wbmp":
+                                contentType = "image/vnd.wap.wbmp";
+                                break;
+                            case "jpe":
+                                contentType = "image/jpeg";
+                                break;
+                            default:
+                                contentType = "text/html";
+                                break;
                         }
                         try {
                             FileInputStream fr = new FileInputStream(pathname);
@@ -115,8 +116,7 @@ public class JerryRat implements Runnable {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    }
-//                    clientSocket.close();
+                    }}
                     s = in.readLine();
                 }
             } catch (IOException e) {
