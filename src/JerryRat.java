@@ -26,8 +26,7 @@ public class JerryRat implements Runnable {
             ) {
                 String s = in.readLine();
                 while (s != null) {
-                    if (s.startsWith("Host")) {
-                    }else {   if (!s.equals("")) {
+                   if (s.startsWith("GET")|s.startsWith("get")) {
                         String[] s1 = s.split(" ");
                         String s2 = s1[1];
                         String pathname = "res/webroot" + s2;
@@ -116,7 +115,7 @@ public class JerryRat implements Runnable {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    }}
+                    }
                     s = in.readLine();
                 }
             } catch (IOException e) {
