@@ -31,16 +31,65 @@ public class JerryRat implements Runnable {
                         String s2 = s1[1];
                         String pathname = "res/webroot" + s2;
                         File file = new File(pathname);
-                        String mimeType="";
+                        String fileName="";
                         if (file.isDirectory()) {
                             pathname = "res/webroot" + s2 + "/index.html";
                             File file1 = new File(pathname);
-                            URLConnection connection = file1.toURL().openConnection();
-                            mimeType = connection.getContentType();
+                            fileName = file1.getName();
                         }else {
-                            URLConnection connection = file.toURL().openConnection();
-                            mimeType = connection.getContentType();
+                            fileName = file.getName();
                         }
+                        String[] split = fileName.split("\\.");
+                        String s3 = split[1];
+                        String contentType = "";
+                        switch (s3){
+                            case "pdf":
+                                contentType = "application/pdf";
+                                break;
+                            case "ai":
+                                contentType = "application/postscript";
+                                break;
+                            case "xml":
+                                contentType = "application/atom+xml";
+                                break;
+                            case "js":
+                                contentType = "application/javascript";
+                                break;
+                            case "json":
+                                contentType = "application/json";
+                                break;
+                            case "doc":
+                                contentType = "application/msword";
+                                break;
+                            case "css":
+                                contentType = "text/css";
+                                break;
+                            case "jpg":
+                                contentType = "image/jpeg";
+                                break;
+                            case "tiff":
+                                contentType = "image/tiff";
+                                break;
+                            case "gif":
+                                contentType = "image/gif";
+                                break;
+                            case "png":
+                                contentType = "image/png";
+                                break;
+                            case "jpeg":
+                                contentType = "image/jpeg";
+                                break;
+                            case "wbmp":
+                                contentType = "image/vnd.wap.wbmp";
+                                break;
+                            case "jpe":
+                                contentType = "image/jpeg";
+                                break;
+                            default:
+                                contentType = "text/html";
+                                break;
+                        }
+
                         try {
                             FileInputStream fr = new FileInputStream(pathname);
                             SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.ENGLISH);
@@ -49,7 +98,7 @@ public class JerryRat implements Runnable {
                             File fileLastTime = new File(pathname);
                             long l = fileLastTime.lastModified();
                             long length = fileLastTime.length();
-                            clientSocket.getOutputStream().write(("HTTP/1.0 200 OK"+"\r\n"+"Date: "+str+"\r\n"+"Server: Apache/11.0"+"\r\n"+"Content-Length: "+length+"\r\n"+"Content-Type: "+ mimeType+"\r\n"+"Last-Modified: "+sdf.format(new Date(l))+"\r\n"+"\r\n").getBytes());
+                            clientSocket.getOutputStream().write(("HTTP/1.0 200 OK"+"\r\n"+"Date: "+str+"\r\n"+"Server: Apache/11.0"+"\r\n"+"Content-Length: "+length+"\r\n"+"Content-Type: "+ contentType+"\r\n"+"Last-Modified: "+sdf.format(new Date(l))+"\r\n"+"\r\n").getBytes());
                             clientSocket.getOutputStream().flush();
                             byte[] chs = new byte[1024];
                             int len;
