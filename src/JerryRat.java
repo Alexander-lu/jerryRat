@@ -40,12 +40,11 @@ public class JerryRat implements Runnable {
                             fileName = file.getName();
                         }
                         String[] split = fileName.split("\\.");
-                        String contentType = "";
+                        String contentType;
                         if (split.length == 1) {
                             contentType = "text/html";
                         }else {
                             String s3 = split[1];
-
                             switch (s3){
                                 case "pdf":
                                     contentType = "application/pdf";
