@@ -62,7 +62,6 @@ public class JerryRat implements Runnable {
                             e.printStackTrace();
                         }
                     }
-
                     s = in.readLine();
                 }
             } catch (IOException e) {
@@ -79,14 +78,8 @@ public class JerryRat implements Runnable {
         SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.ENGLISH);
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         String str = sdf.format(new Date());
-        out.println("HTTP/1.0 200 OK");
-        out.println("Date: "+str);
-        out.println("Server: Apache/0.8.4");
-        out.println("Content-Length: "+readLine);
-        out.println("Content-Type: "+ mimeType);
         File fileLastTime = new File(pathname);
         long l = fileLastTime.lastModified();
-        out.println("Last-Modified: "+sdf.format(new Date(l)));
-        out.println("\n\r"+outWords);
+        out.println("HTTP/1.0 200 OK"+"\n\r"+"Date: "+str+"\n\r"+"Server: Apache/0.8.4"+"\n\r"+"Content-Length: "+readLine+"\n\r"+"Content-Type: "+ mimeType+"\n\r"+"Last-Modified: "+sdf.format(new Date(l))+"\n\r"+outWords);
     }
 }
