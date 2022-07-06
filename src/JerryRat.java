@@ -56,7 +56,7 @@ public class JerryRat implements Runnable {
                             response(out,readLine,pathname,outWords,mimeType);
                             fr.close();
                         } catch (FileNotFoundException e) {
-                            out.println("HTTP/1.0 404 Not Found"+"\r\n"+"\r\n");
+                            out.println("\r\n"+"HTTP/1.0 404 Not Found"+"\r\n"+"\r\n");
                             e.printStackTrace();
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -80,6 +80,6 @@ public class JerryRat implements Runnable {
         String str = sdf.format(new Date());
         File fileLastTime = new File(pathname);
         long l = fileLastTime.lastModified();
-        out.println("HTTP/1.0 200 OK"+"\r\n"+"Date: "+str+"\r\n"+"Server: Apache/0.8.4"+"\r\n"+"Content-Length: "+readLine+"\r\n"+"Content-Type: "+ mimeType+"\r\n"+"Last-Modified: "+sdf.format(new Date(l))+"\r\n"+"\r\n"+outWords);
+        out.println("\r\n"+"HTTP/1.0 200 OK"+"\r\n"+"Date: "+str+"\r\n"+"Server: Apache/0.8.4"+"\r\n"+"Content-Length: "+readLine+"\r\n"+"Content-Type: "+ mimeType+"\r\n"+"Last-Modified: "+sdf.format(new Date(l))+"\r\n"+"\r\n"+outWords);
     }
 }
