@@ -45,7 +45,7 @@ public class JerryRat implements Runnable {
                           if (split.length == 1) {
                             contentType = "text/html";
                         }else {
-                        String s3 = split[1];
+                          String s3 = split[split.length - 1];
                         switch (s3){
                             case "pdf":
                                 contentType = "application/pdf";
