@@ -40,55 +40,61 @@ public class JerryRat implements Runnable {
                             fileName = file.getName();
                         }
                         String[] split = fileName.split("\\.");
-                        String s3 = split[1];
                         String contentType = "";
-                        switch (s3){
-                            case "pdf":
-                                contentType = "application/pdf";
-                                break;
-                            case "ai":
-                                contentType = "application/postscript";
-                                break;
-                            case "xml":
-                                contentType = "application/atom+xml";
-                                break;
-                            case "js":
-                                contentType = "application/javascript";
-                                break;
-                            case "json":
-                                contentType = "application/json";
-                                break;
-                            case "doc":
-                                contentType = "application/msword";
-                                break;
-                            case "css":
-                                contentType = "text/css";
-                                break;
-                            case "jpg":
-                                contentType = "image/jpeg";
-                                break;
-                            case "tiff":
-                                contentType = "image/tiff";
-                                break;
-                            case "gif":
-                                contentType = "image/gif";
-                                break;
-                            case "png":
-                                contentType = "image/png";
-                                break;
-                            case "jpeg":
-                                contentType = "image/jpeg";
-                                break;
-                            case "wbmp":
-                                contentType = "image/vnd.wap.wbmp";
-                                break;
-                            case "jpe":
-                                contentType = "image/jpeg";
-                                break;
-                            default:
-                                contentType = "text/html";
-                                break;
+                        if (split.length == 1) {
+                            contentType = "text/html";
+                        }else {
+                            String s3 = split[1];
+
+                            switch (s3){
+                                case "pdf":
+                                    contentType = "application/pdf";
+                                    break;
+                                case "ai":
+                                    contentType = "application/postscript";
+                                    break;
+                                case "xml":
+                                    contentType = "application/atom+xml";
+                                    break;
+                                case "js":
+                                    contentType = "application/javascript";
+                                    break;
+                                case "json":
+                                    contentType = "application/json";
+                                    break;
+                                case "doc":
+                                    contentType = "application/msword";
+                                    break;
+                                case "css":
+                                    contentType = "text/css";
+                                    break;
+                                case "jpg":
+                                    contentType = "image/jpeg";
+                                    break;
+                                case "tiff":
+                                    contentType = "image/tiff";
+                                    break;
+                                case "gif":
+                                    contentType = "image/gif";
+                                    break;
+                                case "png":
+                                    contentType = "image/png";
+                                    break;
+                                case "jpeg":
+                                    contentType = "image/jpeg";
+                                    break;
+                                case "wbmp":
+                                    contentType = "image/vnd.wap.wbmp";
+                                    break;
+                                case "jpe":
+                                    contentType = "image/jpeg";
+                                    break;
+                                default:
+                                    contentType = "text/html";
+                                    break;
+                            }
                         }
+
 
                         try {
                             FileInputStream fr = new FileInputStream(pathname);
