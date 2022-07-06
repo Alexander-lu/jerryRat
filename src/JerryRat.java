@@ -56,7 +56,7 @@ public class JerryRat implements Runnable {
                             response(out,readLine,pathname,outWords,mimeType);
                             fr.close();
                         } catch (FileNotFoundException e) {
-                            out.println("HTTP/1.0 404 Not Found");
+                            out.println("HTTP/1.0 404 Not Found"+"\r\n"+"\r\n");
                             e.printStackTrace();
                         } catch (IOException e) {
                             e.printStackTrace();
