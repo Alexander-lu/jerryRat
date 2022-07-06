@@ -91,7 +91,6 @@ public class JerryRat implements Runnable {
                                 default:
                                     contentType = "text/html";
                                     break;
-
                         }
                         try {
                             FileInputStream fr = new FileInputStream(pathname);
