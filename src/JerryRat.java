@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -32,13 +33,15 @@ public class JerryRat implements Runnable {
                         String pathname = "res/webroot" + s2;
                         File file = new File(pathname);
 //                    long length = file.length();
-                        String fileHouZuiR="";
+                        String mimeType="";
                         if (file.isDirectory()) {
                             pathname = "res/webroot" + s2 + "/index.html";
-                            fileHouZuiR = "html";
+                            file = new File(pathname);
+                            URLConnection connection = file.toURL().openConnection();
+                            mimeType = connection.getContentType();
                         }else {
-                            String fileHouZui = file.getName();
-                            fileHouZuiR = fileHouZui.substring(fileHouZui.lastIndexOf(".")+1);
+                            URLConnection connection = file.toURL().openConnection();
+                            mimeType = connection.getContentType();
                         }
                         try {
                             String outWords = "";
@@ -50,7 +53,7 @@ public class JerryRat implements Runnable {
                                 readLine +=len;
                                 outWords+=new String(chs,0,len);
                             }
-                            response(out,readLine,pathname,outWords,fileHouZuiR);
+                            response(out,readLine,pathname,outWords,mimeType);
                             fr.close();
                         } catch (FileNotFoundException e) {
                             out.println("HTTP/1.0 404 Not Found");
@@ -72,7 +75,7 @@ public class JerryRat implements Runnable {
         JerryRat jerryRat = new JerryRat();
         new Thread(jerryRat).run();
     }
-    public void response (PrintWriter out,int readLine,String pathname,String outWords,String fileHouZuiR){
+    public void response (PrintWriter out,int readLine,String pathname,String outWords,String mimeType){
         SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.ENGLISH);
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         String str = sdf.format(new Date());
@@ -80,35 +83,7 @@ public class JerryRat implements Runnable {
         out.println("Date: "+str);
         out.println("Server: Apache/0.8.4");
         out.println("Content-Length: "+readLine);
-        switch (fileHouZuiR){
-            case "gif":
-                out.println("Content-Type: "+"image/gif");
-                break;
-            case "json":
-                out.println("Content-Type: "+"application/json");
-                break;
-            case "word":
-                out.println("Content-Type: "+"application/msword");
-                break;
-            case "pdf":
-                out.println("Content-Type: "+"application/pdf");
-                break;
-            case "png":
-                out.println("Content-Type: "+"image/png");
-                break;
-            case "txt":
-                out.println("Content-Type: "+"text/plain");
-                break;
-            case "jpg":
-                out.println("Content-Type: "+"image/jpeg");
-                break;
-            case "html":
-                out.println("Content-Type: "+"text/html");
-                break;
-            default:
-                out.println("Content-Type: "+"text/plain");
-                break;
-        }
+        out.println("Content-Type: "+ mimeType);
         File fileLastTime = new File(pathname);
         long l = fileLastTime.lastModified();
         out.println("Last-Modified: "+sdf.format(new Date(l)));
