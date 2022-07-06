@@ -43,10 +43,9 @@ public class JerryRat implements Runnable {
                         String fileHouZui = file.getName();
                         fileHouZuiR = fileHouZui.substring(fileHouZui.lastIndexOf(".")+1);
                     }
-                    String outWords = "";
-                    FileReader fr = null;
                     try {
-                        fr = new FileReader(pathname);
+                        String outWords = "";
+                        FileReader fr = new FileReader(pathname);
                         char[] chs = new char[1024];
                         int readLine = 0;
                         int len;
