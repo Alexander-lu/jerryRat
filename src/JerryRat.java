@@ -4,6 +4,7 @@ import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
 
 public class JerryRat implements Runnable {
@@ -29,7 +30,7 @@ public class JerryRat implements Runnable {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                while (s != null) {
+                while (!Objects.equals(s, "")) {
                     String[] s1 = s.split(" ");
                     String s2 = s1[1];
                     String pathname = "res/webroot" + s2;
