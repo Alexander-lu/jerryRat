@@ -24,44 +24,42 @@ public class JerryRat implements Runnable {
                     PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                     BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             ) {
-                String s = null;
-                try {
-                    s = in.readLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                while (!Objects.equals(s, "")) {
-                    String[] s1 = s.split(" ");
-                    String s2 = s1[1];
-                    String pathname = "res/webroot" + s2;
-                    File file = new File(pathname);
+                String s = in.readLine();
+                while (s != null) {
+                    if (!s.equals("")) {
+                        String[] s1 = s.split(" ");
+                        String s2 = s1[1];
+                        String pathname = "res/webroot" + s2;
+                        File file = new File(pathname);
 //                    long length = file.length();
-                    String fileHouZuiR="";
-                    if (file.isDirectory()) {
-                        pathname = "res/webroot" + s2 + "/index.html";
-                        fileHouZuiR = "html";
-                    }else {
-                        String fileHouZui = file.getName();
-                        fileHouZuiR = fileHouZui.substring(fileHouZui.lastIndexOf(".")+1);
-                    }
-                    try {
-                        String outWords = "";
-                        FileReader fr = new FileReader(pathname);
-                        char[] chs = new char[1024];
-                        int readLine = 0;
-                        int len;
-                        while ((len = fr.read(chs))!=-1) {
-                            readLine +=len;
-                            outWords+=new String(chs,0,len);
+                        String fileHouZuiR="";
+                        if (file.isDirectory()) {
+                            pathname = "res/webroot" + s2 + "/index.html";
+                            fileHouZuiR = "html";
+                        }else {
+                            String fileHouZui = file.getName();
+                            fileHouZuiR = fileHouZui.substring(fileHouZui.lastIndexOf(".")+1);
                         }
-                        response(out,readLine,pathname,outWords,fileHouZuiR);
-                        fr.close();
-                    } catch (FileNotFoundException e) {
-                        out.println("HTTP/1.0 404 Not Found");
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        try {
+                            String outWords = "";
+                            FileReader fr = new FileReader(pathname);
+                            char[] chs = new char[1024];
+                            int readLine = 0;
+                            int len;
+                            while ((len = fr.read(chs))!=-1) {
+                                readLine +=len;
+                                outWords+=new String(chs,0,len);
+                            }
+                            response(out,readLine,pathname,outWords,fileHouZuiR);
+                            fr.close();
+                        } catch (FileNotFoundException e) {
+                            out.println("HTTP/1.0 404 Not Found");
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
+
                     s = in.readLine();
                 }
             } catch (IOException e) {
