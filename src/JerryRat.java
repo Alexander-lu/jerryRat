@@ -2,6 +2,8 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URLConnection;
+import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -24,10 +26,11 @@ public class JerryRat implements Runnable {
                     Socket clientSocket = serverSocket.accept();
                     BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             ) {
-                String s = in.readLine();
-                while (s != null) {
-                   if (s.startsWith("GET")|s.startsWith("get")) {
-                        String[] s1 = s.split(" ");
+                String st = in.readLine();
+                while (st != null) {
+                   if (st.startsWith("GET")|st.startsWith("get")) {
+                       String s = URLDecoder.decode(st, "utf-8");
+                       String[] s1 = s.split(" ");
                         String s2 = s1[1];
                         String pathname = "res/webroot" + s2;
                         File file = new File(pathname);
@@ -104,7 +107,7 @@ public class JerryRat implements Runnable {
                             File fileLastTime = new File(pathname);
                             long l = fileLastTime.lastModified();
                             long length = fileLastTime.length();
-                            clientSocket.getOutputStream().write(("HTTP/1.0 200 OK"+"\r\n"+"Date: "+str+"\r\n"+"Server: Apache/11.0"+"\r\n"+"Content-Length: "+length+"\r\n"+"Content-Type: "+ contentType+"\r\n"+"Last-Modified: "+sdf.format(new Date(l))+"\r\n"+"\r\n").getBytes());
+                            clientSocket.getOutputStream().write(("HTTP/1.0 200 OK"+"\r\n"+"Date: "+str+"\r\n"+"Server: Apache/11.0"+"\r\n"+"Content-Length: "+length+"\r\n"+"Content-Type: "+ contentType+";charset=utf-8"+"\r\n"+"Last-Modified: "+sdf.format(new Date(l))+"\r\n"+"\r\n").getBytes());
                             clientSocket.getOutputStream().flush();
                             byte[] chs = new byte[1024];
                             int len;
@@ -119,8 +122,8 @@ public class JerryRat implements Runnable {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    }else if (s.equals("")) {}
-                    s = in.readLine();
+                    }else if (st.equals("")) {}
+                    st = in.readLine();
                 }
             } catch (IOException e) {
               e.printStackTrace();
