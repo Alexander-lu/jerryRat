@@ -23,7 +23,12 @@ public class JerryRat implements Runnable {
                     PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                     BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             ) {
-                String s = in.readLine();
+                String s = null;
+                try {
+                    s = in.readLine();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 while (s != null) {
                     String[] s1 = s.split(" ");
                     String s2 = s1[1];
@@ -39,20 +44,28 @@ public class JerryRat implements Runnable {
                         fileHouZuiR = fileHouZui.substring(fileHouZui.lastIndexOf(".")+1);
                     }
                     String outWords = "";
-                    FileReader fr = new FileReader(pathname);
-                    char[] chs = new char[1024];
-                    int readLine = 0;
-                    int len;
-                    while ((len = fr.read(chs))!=-1) {
-                        readLine +=len;
-                        outWords+=new String(chs,0,len);
+                    FileReader fr = null;
+                    try {
+                        fr = new FileReader(pathname);
+                        char[] chs = new char[1024];
+                        int readLine = 0;
+                        int len;
+                        while ((len = fr.read(chs))!=-1) {
+                            readLine +=len;
+                            outWords+=new String(chs,0,len);
+                        }
+                        response(out,readLine,pathname,outWords,fileHouZuiR);
+                        fr.close();
+                    } catch (FileNotFoundException e) {
+                        out.println("HTTP/1.0 404 Not Found");
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                    response(out,readLine,pathname,outWords,fileHouZuiR);
-                    fr.close();
                     s = in.readLine();
                 }
             } catch (IOException e) {
-                throw new RuntimeException(e);
+              e.printStackTrace();
             }
         }
     }
