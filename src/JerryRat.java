@@ -24,7 +24,6 @@ public class JerryRat implements Runnable {
                     Socket clientSocket = serverSocket.accept();
                     BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             ) {
-//                    PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                 String s = in.readLine();
                 while (s != null) {
                     if (!s.equals("")) {
@@ -32,12 +31,11 @@ public class JerryRat implements Runnable {
                         String s2 = s1[1];
                         String pathname = "res/webroot" + s2;
                         File file = new File(pathname);
-//                    long length = file.length();
                         String mimeType="";
                         if (file.isDirectory()) {
                             pathname = "res/webroot" + s2 + "/index.html";
-                            file = new File(pathname);
-                            URLConnection connection = file.toURL().openConnection();
+                            File file1 = new File(pathname);
+                            URLConnection connection = file1.toURL().openConnection();
                             mimeType = connection.getContentType();
                         }else {
                             URLConnection connection = file.toURL().openConnection();
