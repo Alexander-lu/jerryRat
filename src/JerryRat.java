@@ -22,9 +22,9 @@ public class JerryRat implements Runnable {
         while(true) {
             try (
                     Socket clientSocket = serverSocket.accept();
-                    PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                     BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             ) {
+//                    PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                 String s = in.readLine();
                 while (s != null) {
                     if (!s.equals("")) {
@@ -44,19 +44,22 @@ public class JerryRat implements Runnable {
                             mimeType = connection.getContentType();
                         }
                         try {
-                            String outWords = "";
-                            FileReader fr = new FileReader(pathname);
-                            char[] chs = new char[1024];
-                            int readLine = 0;
+                            SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.ENGLISH);
+                            sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+                            String str = sdf.format(new Date());
+                            File fileLastTime = new File(pathname);
+                            long l = fileLastTime.lastModified();
+                            long length = fileLastTime.length();
+                            clientSocket.getOutputStream().write(("HTTP/1.0 200 OK"+"\r\n"+"Date: "+str+"\r\n"+"Server: Apache/0.8.4"+"\r\n"+"Content-Length: "+length+"\r\n"+"Content-Type: "+ mimeType+"\r\n"+"Last-Modified: "+sdf.format(new Date(l))+"\r\n"+"\r\n").getBytes());
+                            FileInputStream fr = new FileInputStream(pathname);
+                            byte[] chs = new byte[1024];
                             int len;
                             while ((len = fr.read(chs))!=-1) {
-                                readLine +=len;
-                                outWords+=new String(chs,0,len);
+                                clientSocket.getOutputStream().write(chs,0,len);
                             }
-                            response(out,readLine,pathname,outWords,mimeType);
                             fr.close();
                         } catch (FileNotFoundException e) {
-                            out.println("HTTP/1.0 404 Not Found"+"\r\n"+"\r\n");
+                            clientSocket.getOutputStream().write(("HTTP/1.0 404 Not Found"+"\r\n"+"\r\n").getBytes());
                             e.printStackTrace();
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -73,13 +76,5 @@ public class JerryRat implements Runnable {
     public static void main(String[] args) throws IOException {
         JerryRat jerryRat = new JerryRat();
         new Thread(jerryRat).run();
-    }
-    public void response (PrintWriter out,int readLine,String pathname,String outWords,String mimeType){
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.ENGLISH);
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-        String str = sdf.format(new Date());
-        File fileLastTime = new File(pathname);
-        long l = fileLastTime.lastModified();
-        out.println("HTTP/1.0 200 OK"+"\r\n"+"Date: "+str+"\r\n"+"Server: Apache/0.8.4"+"\r\n"+"Content-Length: "+readLine+"\r\n"+"Content-Type: "+ mimeType+"\r\n"+"Last-Modified: "+sdf.format(new Date(l))+"\r\n"+"\r\n"+outWords);
     }
 }
