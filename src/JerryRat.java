@@ -41,11 +41,8 @@ public class JerryRat implements Runnable {
                         }
                         String[] split = fileName.split("\\.");
                         String contentType;
-                        if (split.length == 1) {
-                            contentType = "text/html";
-                        }else {
-                            String s3 = split[1];
-                            switch (s3){
+                        String s3 = split[1];
+                        switch (s3){
                                 case "pdf":
                                     contentType = "application/pdf";
                                     break;
@@ -94,10 +91,8 @@ public class JerryRat implements Runnable {
                                 default:
                                     contentType = "text/html";
                                     break;
-                            }
+
                         }
-
-
                         try {
                             FileInputStream fr = new FileInputStream(pathname);
                             SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.ENGLISH);
