@@ -198,7 +198,7 @@ public class JerryRat implements Runnable {
                                     }
                                 }
                             };
-                            ww.schedule(task, 100);
+                            ww.schedule(task, 1000);
                             for (int i = 0; i <lengthNumber ; i++) {
                                 int read = in.read();
                             }
@@ -241,7 +241,7 @@ public class JerryRat implements Runnable {
                                     }
                                 }
                             };
-                            ww.schedule(task, 100);
+                            ww.schedule(task, 1000);
                             for (int i = 0; i <lengthNumber ; i++) {
                                 int read = in.read();
                                 fileOutputStream.write(read);
