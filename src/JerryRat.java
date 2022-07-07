@@ -30,15 +30,21 @@ public class JerryRat implements Runnable {
             ) {
                 String st = in.readLine();
                 while (st != null) {
-                    if (st.startsWith("GET") | st.startsWith("get")|st.startsWith("HEAD")|st.startsWith("head")) {
+                    if (st.startsWith("GET") | st.startsWith("get") | st.startsWith("HEAD") | st.startsWith("head")) {
                         boolean ifHead = false;
-                        if (st.startsWith("HEAD")|st.startsWith("head")) {
+                        if (st.startsWith("HEAD") | st.startsWith("head")) {
                             ifHead = true;
                         }
                         boolean ifOld = true;
                         String s2;
                         String s = URLDecoder.decode(st, "utf-8");
-                        String s1 = s.substring(4);
+                        String s1;
+                        if(ifHead){
+                            s1 = s.substring(5);
+                        }else {
+                            s1 = s.substring(4);
+                        }
+
                         if (st.endsWith("HTTP/1.0") | st.endsWith("HTTP/1.1")) {
                             ifOld = false;
                             s2 = s1.substring(0, s1.length() - 9);
@@ -46,7 +52,7 @@ public class JerryRat implements Runnable {
                             s2 = s1;
                         }
                         if (ifOld) {
-                            if(ifHead){
+                            if (ifHead) {
                                 st = in.readLine();
                                 continue;
                             }
@@ -60,7 +66,10 @@ public class JerryRat implements Runnable {
                             SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.ENGLISH);
                             sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
                             String str = sdf.format(new Date());
-                            clientSocket.getOutputStream().write(("HTTP/1.0 200 OK"+"\r\n"+"Date: "+str+"\r\n"+"Server: Apache/11.0"+"\r\n"+"Content-Length: "+substring.length()+"\r\n"+"Content-Type: "+ "text/html"+";charset=utf-8"+"\r\n"+"\r\n").getBytes());
+                            clientSocket.getOutputStream().write(("HTTP/1.0 200 OK" + "\r\n" +
+                                    "Date: " + str + "\r\n" + "Server: Apache/11.0" + "\r\n" +
+                                    "Content-Length: " + substring.length() + "\r\n" + "Content-Type: " +
+                                    "" + "text/html" + ";charset=utf-8" + "\r\n" + "\r\n").getBytes());
                             clientSocket.getOutputStream().write(substring.getBytes());
                             clientSocket.getOutputStream().flush();
                         } else {
@@ -139,14 +148,14 @@ public class JerryRat implements Runnable {
                                 File fileLastTime = new File(pathname);
                                 long l = fileLastTime.lastModified();
                                 long length = fileLastTime.length();
-                                if(!ifOld){
+                                if (!ifOld) {
                                     clientSocket.getOutputStream().write(("HTTP/1.0 200 OK" + "\r\n" + "Date: " + str + "\r\n" + "Server: Apache/11.0" + "\r\n" + "Content-Length: " + length + "\r\n" + "Content-Type: " + contentType + ";charset=utf-8" + "\r\n" + "Last-Modified: " + sdf.format(new Date(l)) + "\r\n" + "\r\n").getBytes());
                                     clientSocket.getOutputStream().flush();
                                 }
                                 byte[] chs = new byte[1024];
                                 int len;
                                 while ((len = fr.read(chs)) != -1) {
-                                    if(!ifHead){
+                                    if (!ifHead) {
                                         clientSocket.getOutputStream().write(chs, 0, len);
                                         clientSocket.getOutputStream().flush();
                                     }
@@ -160,8 +169,7 @@ public class JerryRat implements Runnable {
                                 e.printStackTrace();
                             }
                         }
-                    }
-                    else if (st.equals("")) {
+                    } else if (st.equals("")) {
                     }
                     st = in.readLine();
                 }
