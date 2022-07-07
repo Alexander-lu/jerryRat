@@ -174,15 +174,27 @@ public class JerryRat implements Runnable {
                         String afterDecode = URLDecoder.decode(st, "utf-8");
                         String deletePost = afterDecode.substring(4);
                         String url = deletePost.substring(0, deletePost.length() - 9);
-                        FileOutputStream fileOutputStream = new FileOutputStream(new File(url));
-                        byte[] chs = new byte[1024];
-                        int len;
-                        while ((len = clientSocket.getInputStream().read(chs)) != -1) {
-                            fileOutputStream.write(chs, 0, len);
-                            fileOutputStream.flush();
+                        if (url.equals("/endpoints/null")) {
+                            clientSocket.getOutputStream().write(("HTTP/1.0 204 Not Content" + "\r\n" + "\r\n").getBytes());
+                            clientSocket.getOutputStream().flush();
+                        }else {
 
+                            File file = new File("res/webroot/emails");
+                            if(!file.exists()){
+                                file.mkdirs();
+                            }
+                            File emailFail = new File(url);
+                            emailFail.createNewFile();
+                            FileOutputStream fileOutputStream = new FileOutputStream(emailFail);
+                            byte[] chs = new byte[1024];
+                            int len;
+                            while ((len = clientSocket.getInputStream().read(chs)) != -1) {
+                                fileOutputStream.write(chs, 0, len);
+                                fileOutputStream.flush();
+
+                            }
+                            fileOutputStream.close();
                         }
-                        fileOutputStream.close();
                     }
                     else if (st.equals("")) {
                     }
