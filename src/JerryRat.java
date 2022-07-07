@@ -224,6 +224,8 @@ public class JerryRat implements Runnable {
                                 fileOutputStream.flush();
                             }
                             fileOutputStream.close();
+                            clientSocket.getOutputStream().write(("HTTP/1.0 202 OK" + "\r\n" + "\r\n").getBytes());
+                            clientSocket.getOutputStream().flush();
                         }
                     }
                     else if (st.equals("")) {
