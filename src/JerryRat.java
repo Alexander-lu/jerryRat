@@ -172,12 +172,23 @@ public class JerryRat implements Runnable {
                     }
                     else if (st.startsWith("POST")|st.startsWith("post")){
                         String afterDecode = URLDecoder.decode(st, "utf-8");
-                        String deletePost = afterDecode.substring(4);
+                        String deletePost = afterDecode.substring(5);
                         String url = deletePost.substring(0, deletePost.length() - 9);
                         if (url.equals("/endpoints/null")) {
                             clientSocket.getOutputStream().write(("HTTP/1.0 204 Not Content" + "\r\n" + "\r\n").getBytes());
                             clientSocket.getOutputStream().flush();
                         }else {
+                            File file = new File("res/webroot/emails");
+                            if(!file.exists()){
+                                file.mkdirs();
+                            }
+                            String realUrl = "res/webroot"+url;
+                            File emailFail = new File(realUrl);
+                            try {
+                                emailFail.createNewFile();
+                            }catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             String contentLength = in.readLine();
                             while (!contentLength.startsWith("Content-Length")) {
                                 contentLength = in.readLine();
@@ -189,19 +200,10 @@ public class JerryRat implements Runnable {
                             while (!black.equals("")) {
                                 black = in.readLine();
                             }
-                            File file = new File("res/webroot/emails");
-                            if(!file.exists()){
-                                file.mkdirs();
-                            }
-                            File emailFail = new File(url);
-                            emailFail.createNewFile();
                             FileOutputStream fileOutputStream = new FileOutputStream(emailFail);
-                            byte[] chs = new byte[lengthNumber];
-                            int len;
-                            while ((len = clientSocket.getInputStream().read(chs)) != -1) {
-                                fileOutputStream.write(chs, 0, len);
+                            for (int i = 0; i <lengthNumber ; i++) {
+                                fileOutputStream.write(in.read());
                                 fileOutputStream.flush();
-
                             }
                             fileOutputStream.close();
                         }
