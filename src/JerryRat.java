@@ -31,10 +31,12 @@ public class JerryRat implements Runnable {
                 String st = in.readLine();
                 while (st != null) {
                     if (st.startsWith("GET") | st.startsWith("get")) {
+                        boolean ifOld = true;
                         String s2;
                         String s = URLDecoder.decode(st, "utf-8");
                         String s1 = s.substring(4);
                         if (st.endsWith("HTTP/1.0") | st.endsWith("HTTP/1.1")) {
+                            ifOld = false;
                             s2 = s1.substring(0, s1.length() - 9);
                         } else {
                             s2 = s1;
@@ -48,9 +50,14 @@ public class JerryRat implements Runnable {
                             SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.ENGLISH);
                             sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
                             String str = sdf.format(new Date());
-                            clientSocket.getOutputStream().write(("HTTP/1.0 200 OK"+"\r\n"+"Date: "+str+"\r\n"+"Server: Apache/11.0"+"\r\n"+"Content-Type: "+ "text/html"+";charset=utf-8"+"\r\n"+"\r\n").getBytes());
-                            clientSocket.getOutputStream().write(substring.getBytes());
-                            clientSocket.getOutputStream().flush();
+                            if (ifOld) {
+                                clientSocket.getOutputStream().write(("<html>"+substring+"</html>").getBytes());
+                                clientSocket.getOutputStream().flush();
+                            }else {
+                                clientSocket.getOutputStream().write(("HTTP/1.0 200 OK"+"\r\n"+"Date: "+str+"\r\n"+"Server: Apache/11.0"+"\r\n"+"Content-Type: "+ "text/html"+";charset=utf-8"+"\r\n"+"\r\n").getBytes());
+                                clientSocket.getOutputStream().write(substring.getBytes());
+                                clientSocket.getOutputStream().flush();
+                            }
                         } else {
                             String pathname = "res/webroot" + s2;
                             File file = new File(pathname);
@@ -64,7 +71,6 @@ public class JerryRat implements Runnable {
                             }
                             String contentType;
                             String[] split = fileName.split("\\.");
-
                             if (split.length == 1) {
                                 contentType = "text/html";
                             } else {
@@ -145,7 +151,8 @@ public class JerryRat implements Runnable {
                                 e.printStackTrace();
                             }
                         }
-                    } else if (st.equals("")) {
+                    }
+                    else if (st.equals("")) {
                     }
                     st = in.readLine();
                 }
