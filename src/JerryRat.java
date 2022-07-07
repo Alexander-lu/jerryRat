@@ -30,7 +30,11 @@ public class JerryRat implements Runnable {
             ) {
                 String st = in.readLine();
                 while (st != null) {
-                    if (st.startsWith("GET") | st.startsWith("get")) {
+                    if (st.startsWith("GET") | st.startsWith("get")|st.startsWith("HEAD")|st.startsWith("head")) {
+                        boolean ifHead = false;
+                        if (st.startsWith("HEAD")|st.startsWith("head")) {
+                            ifHead = true;
+                        }
                         boolean ifOld = true;
                         String s2;
                         String s = URLDecoder.decode(st, "utf-8");
@@ -136,8 +140,10 @@ public class JerryRat implements Runnable {
                                 byte[] chs = new byte[1024];
                                 int len;
                                 while ((len = fr.read(chs)) != -1) {
-                                    clientSocket.getOutputStream().write(chs, 0, len);
-                                    clientSocket.getOutputStream().flush();
+                                    if(!ifHead){
+                                        clientSocket.getOutputStream().write(chs, 0, len);
+                                        clientSocket.getOutputStream().flush();
+                                    }
                                 }
                                 fr.close();
                             } catch (FileNotFoundException e) {
