@@ -186,19 +186,7 @@ public class JerryRat implements Runnable {
                                 black = in.readLine();
                             }
                             FileOutputStream fileOutputStream = new FileOutputStream("res/webroot/null");
-                            Timer ww = new Timer();
-                            TimerTask task = new TimerTask() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        fileOutputStream.close();
-                                        clientSocket.close();
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            };
-                            ww.schedule(task, 1000);
+
                             for (int i = 0; i <lengthNumber ; i++) {
                                 int read = in.read();
                             }
@@ -229,19 +217,7 @@ public class JerryRat implements Runnable {
                                 black = in.readLine();
                             }
                             FileOutputStream fileOutputStream = new FileOutputStream(emailFail,true);
-                            Timer ww = new Timer();
-                            TimerTask task = new TimerTask() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        fileOutputStream.close();
-                                        clientSocket.close();
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            };
-                            ww.schedule(task, 1000);
+
                             for (int i = 0; i <lengthNumber ; i++) {
                                 int read = in.read();
                                 fileOutputStream.write(read);
