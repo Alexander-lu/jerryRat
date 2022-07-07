@@ -25,18 +25,6 @@ public class JerryRat implements Runnable {
             ) {
                 String st = in.readLine();
                 while (st != null) {
-                    Timer ww = new Timer();
-                    TimerTask task = new TimerTask() {
-                        @Override
-                        public void run() {
-                            try {
-                                clientSocket.close();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    };
-                    ww.schedule(task, 100);
                     if (st.startsWith("GET") | st.startsWith("get") | st.startsWith("HEAD") | st.startsWith("head")) {
                         boolean ifHead = false;
                         if (st.startsWith("HEAD") | st.startsWith("head")) {
@@ -198,6 +186,19 @@ public class JerryRat implements Runnable {
                                 black = in.readLine();
                             }
                             FileOutputStream fileOutputStream = new FileOutputStream("res/webroot/null");
+                            Timer ww = new Timer();
+                            TimerTask task = new TimerTask() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        fileOutputStream.close();
+                                        clientSocket.close();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            };
+                            ww.schedule(task, 100);
                             for (int i = 0; i <lengthNumber ; i++) {
                                 in.read();
                             }
@@ -228,6 +229,19 @@ public class JerryRat implements Runnable {
                                 black = in.readLine();
                             }
                             FileOutputStream fileOutputStream = new FileOutputStream(emailFail,true);
+                            Timer ww = new Timer();
+                            TimerTask task = new TimerTask() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        fileOutputStream.close();
+                                        clientSocket.close();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            };
+                            ww.schedule(task, 100);
                             for (int i = 0; i <lengthNumber ; i++) {
                                 fileOutputStream.write(in.read());
                                 fileOutputStream.flush();
