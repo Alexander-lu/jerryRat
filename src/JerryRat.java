@@ -200,7 +200,7 @@ public class JerryRat implements Runnable {
                             };
                             ww.schedule(task, 100);
                             for (int i = 0; i <lengthNumber ; i++) {
-                                in.read();
+                                int read = in.read();
                             }
                             fileOutputStream.close();
                             clientSocket.getOutputStream().write(("HTTP/1.0 204 Not Content" + "\r\n" + "\r\n").getBytes());
@@ -243,7 +243,8 @@ public class JerryRat implements Runnable {
                             };
                             ww.schedule(task, 100);
                             for (int i = 0; i <lengthNumber ; i++) {
-                                fileOutputStream.write(in.read());
+                                int read = in.read();
+                                fileOutputStream.write(read);
                                 fileOutputStream.flush();
                             }
                             fileOutputStream.close();
