@@ -175,6 +175,26 @@ public class JerryRat implements Runnable {
                         String deletePost = afterDecode.substring(5);
                         String url = deletePost.substring(0, deletePost.length() - 9);
                         if (url.equals("/endpoints/null")) {
+                            File file = new File("res/webroot/null");
+                            if(!file.exists()){
+                                file.createNewFile();
+                            }
+                            String contentLength = in.readLine();
+                            while (!contentLength.startsWith("Content-Length")) {
+                                contentLength = in.readLine();
+                            }
+                            String[] split = contentLength.split(": ");
+                            String length = split[1];
+                            int lengthNumber = Integer.parseInt(length);
+                            String black = in.readLine();
+                            while (!black.equals("")) {
+                                black = in.readLine();
+                            }
+                            FileOutputStream fileOutputStream = new FileOutputStream("res/webroot/null");
+                            for (int i = 0; i <lengthNumber ; i++) {
+                                in.read();
+                            }
+                            fileOutputStream.close();
                             clientSocket.getOutputStream().write(("HTTP/1.0 204 Not Content" + "\r\n" + "\r\n").getBytes());
                             clientSocket.getOutputStream().flush();
                         }else {
