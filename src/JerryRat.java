@@ -178,7 +178,17 @@ public class JerryRat implements Runnable {
                             clientSocket.getOutputStream().write(("HTTP/1.0 204 Not Content" + "\r\n" + "\r\n").getBytes());
                             clientSocket.getOutputStream().flush();
                         }else {
-
+                            String contentLength = in.readLine();
+                            while (!contentLength.startsWith("Content-Length")) {
+                                contentLength = in.readLine();
+                            }
+                            String[] split = contentLength.split(": ");
+                            String length = split[1];
+                            int lengthNumber = Integer.parseInt(length);
+                            String black = in.readLine();
+                            while (!black.equals("")) {
+                                black = in.readLine();
+                            }
                             File file = new File("res/webroot/emails");
                             if(!file.exists()){
                                 file.mkdirs();
@@ -186,7 +196,7 @@ public class JerryRat implements Runnable {
                             File emailFail = new File(url);
                             emailFail.createNewFile();
                             FileOutputStream fileOutputStream = new FileOutputStream(emailFail);
-                            byte[] chs = new byte[1024];
+                            byte[] chs = new byte[lengthNumber];
                             int len;
                             while ((len = clientSocket.getInputStream().read(chs)) != -1) {
                                 fileOutputStream.write(chs, 0, len);
