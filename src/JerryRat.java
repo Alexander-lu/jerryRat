@@ -33,7 +33,16 @@ public class JerryRat implements Runnable {
                        String[] s1 = s.split(" ");
                         String s2 = s1[1];
                         if (s2.equals("/endpoints/user-agent")) {
-                            
+                            String userAgent = in.readLine();
+                            while(!userAgent.startsWith("User-Agent")){
+                                userAgent = in.readLine();
+                            }
+                            String substring = userAgent.substring(12);
+                            SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.ENGLISH);
+                            sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+                            String str = sdf.format(new Date());
+                            clientSocket.getOutputStream().write(("HTTP/1.0 200 OK"+"\r\n"+"Date: "+str+"\r\n"+"Server: Apache/11.0"+"\r\n"+"Content-Type: "+ "text/html"+";charset=utf-8"+"\r\n"+"\r\n").getBytes());
+                            clientSocket.getOutputStream().write(substring.getBytes());
                         }else{
 
                             String pathname = "res/webroot" + s2;
