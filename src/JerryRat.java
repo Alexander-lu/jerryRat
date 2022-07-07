@@ -50,14 +50,9 @@ public class JerryRat implements Runnable {
                             SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.ENGLISH);
                             sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
                             String str = sdf.format(new Date());
-                            if (ifOld) {
-                                clientSocket.getOutputStream().write(("<html>"+substring+"</html>").getBytes());
-                                clientSocket.getOutputStream().flush();
-                            }else {
-                                clientSocket.getOutputStream().write(("HTTP/1.0 200 OK"+"\r\n"+"Date: "+str+"\r\n"+"Server: Apache/11.0"+"\r\n"+"Content-Type: "+ "text/html"+";charset=utf-8"+"\r\n"+"\r\n").getBytes());
-                                clientSocket.getOutputStream().write(substring.getBytes());
-                                clientSocket.getOutputStream().flush();
-                            }
+                            clientSocket.getOutputStream().write(("HTTP/1.0 200 OK"+"\r\n"+"Date: "+str+"\r\n"+"Server: Apache/11.0"+"\r\n"+"Content-Length: "+substring.length()+"\r\n"+"Content-Type: "+ "text/html"+";charset=utf-8"+"\r\n"+"\r\n").getBytes());
+                            clientSocket.getOutputStream().write(substring.getBytes());
+                            clientSocket.getOutputStream().flush();
                         } else {
                             String pathname = "res/webroot" + s2;
                             File file = new File(pathname);
