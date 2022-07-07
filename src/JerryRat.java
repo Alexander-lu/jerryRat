@@ -45,6 +45,12 @@ public class JerryRat implements Runnable {
                         } else {
                             s2 = s1;
                         }
+                        if (ifOld) {
+                            if(ifHead){
+                                st = in.readLine();
+                                continue;
+                            }
+                        }
                         if (s2.equals("/endpoints/user-agent")) {
                             String userAgent = in.readLine();
                             while (!userAgent.startsWith("User-Agent")) {
