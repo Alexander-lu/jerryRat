@@ -169,7 +169,22 @@ public class JerryRat implements Runnable {
                                 e.printStackTrace();
                             }
                         }
-                    } else if (st.equals("")) {
+                    }
+                    else if (st.startsWith("POST")|st.startsWith("post")){
+                        String afterDecode = URLDecoder.decode(st, "utf-8");
+                        String deletePost = afterDecode.substring(4);
+                        String url = deletePost.substring(0, deletePost.length() - 9);
+                        FileOutputStream fileOutputStream = new FileOutputStream(new File(url));
+                        byte[] chs = new byte[1024];
+                        int len;
+                        while ((len = clientSocket.getInputStream().read(chs)) != -1) {
+                            fileOutputStream.write(chs, 0, len);
+                            fileOutputStream.flush();
+
+                        }
+                        fileOutputStream.close();
+                    }
+                    else if (st.equals("")) {
                     }
                     st = in.readLine();
                 }
