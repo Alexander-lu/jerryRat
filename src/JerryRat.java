@@ -134,8 +134,10 @@ public class JerryRat implements Runnable {
                                 File fileLastTime = new File(pathname);
                                 long l = fileLastTime.lastModified();
                                 long length = fileLastTime.length();
-                                clientSocket.getOutputStream().write(("HTTP/1.0 200 OK" + "\r\n" + "Date: " + str + "\r\n" + "Server: Apache/11.0" + "\r\n" + "Content-Length: " + length + "\r\n" + "Content-Type: " + contentType + ";charset=utf-8" + "\r\n" + "Last-Modified: " + sdf.format(new Date(l)) + "\r\n" + "\r\n").getBytes());
-                                clientSocket.getOutputStream().flush();
+                                if(!ifOld){
+                                    clientSocket.getOutputStream().write(("HTTP/1.0 200 OK" + "\r\n" + "Date: " + str + "\r\n" + "Server: Apache/11.0" + "\r\n" + "Content-Length: " + length + "\r\n" + "Content-Type: " + contentType + ";charset=utf-8" + "\r\n" + "Last-Modified: " + sdf.format(new Date(l)) + "\r\n" + "\r\n").getBytes());
+                                    clientSocket.getOutputStream().flush();
+                                }
                                 byte[] chs = new byte[1024];
                                 int len;
                                 while ((len = fr.read(chs)) != -1) {
