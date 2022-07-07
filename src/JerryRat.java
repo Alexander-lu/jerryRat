@@ -5,10 +5,7 @@ import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,8 +16,6 @@ public class JerryRat implements Runnable {
     public JerryRat() throws IOException {
         serverSocket = new ServerSocket(Integer.parseInt(SERVER_PORT));
     }
-
-
     @Override
     public void run() {
         while (true) {
@@ -30,6 +25,18 @@ public class JerryRat implements Runnable {
             ) {
                 String st = in.readLine();
                 while (st != null) {
+                    Timer ww = new Timer();
+                    TimerTask task = new TimerTask() {
+                        @Override
+                        public void run() {
+                            try {
+                                clientSocket.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    };
+                    ww.schedule(task, 100);
                     if (st.startsWith("GET") | st.startsWith("get") | st.startsWith("HEAD") | st.startsWith("head")) {
                         boolean ifHead = false;
                         if (st.startsWith("HEAD") | st.startsWith("head")) {
