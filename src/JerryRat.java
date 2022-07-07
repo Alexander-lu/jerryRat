@@ -139,6 +139,7 @@ public class JerryRat implements Runnable {
                                 fr.close();
                             } catch (FileNotFoundException e) {
                                 clientSocket.getOutputStream().write(("HTTP/1.0 404 Not Found" + "\r\n" + "\r\n").getBytes());
+                                clientSocket.getOutputStream().flush();
                                 e.printStackTrace();
                             } catch (IOException e) {
                                 e.printStackTrace();
