@@ -220,7 +220,7 @@ public class JerryRat implements Runnable {
                             while (!black.equals("")) {
                                 black = in.readLine();
                             }
-                            FileOutputStream fileOutputStream = new FileOutputStream(emailFail);
+                            FileOutputStream fileOutputStream = new FileOutputStream(emailFail,true);
                             for (int i = 0; i <lengthNumber ; i++) {
                                 fileOutputStream.write(in.read());
                                 fileOutputStream.flush();
