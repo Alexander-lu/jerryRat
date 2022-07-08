@@ -64,6 +64,31 @@ public class JerryRat implements Runnable {
                         s2 = s1;
                     }
                     if (s2.equals("/endpoints/user-agent")) {
+                        while ((OOOO=inputStream.read()) != -1){
+                            if (OOOO==13) {
+                                OOOO=inputStream.read();
+                                if (OOOO==10) {
+                                    OOOO=inputStream.read();
+                                    a.add((byte)13);
+                                    a.add((byte)10);
+                                    if (OOOO==13) {
+                                        OOOO=inputStream.read();
+                                        break;
+                                    }else{
+                                        a.add((byte)OOOO);
+                                    }
+                                }
+                            }else{
+                                a.add((byte)OOOO);
+                            }
+                        }
+                        bytes = new byte[a.size()];
+                        for (int i = 0; i < a.size(); i++) {
+                            bytes[i] = a.get(i);
+                        }
+                        bytes2String = new String(bytes, "UTF-8");
+                        split = bytes2String.split("\r\n",2);
+                        st = split[0];
                         split = split[1].split("\r\n",2);
                         String userAgent = split[0];
                         while (!userAgent.startsWith("User-Agent")) {
