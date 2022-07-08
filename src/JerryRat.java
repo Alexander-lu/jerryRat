@@ -1,8 +1,6 @@
 import java.io.*;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.URLConnection;
-import java.net.URLDecoder;
+import java.lang.reflect.Array;
+import java.net.*;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -21,9 +19,36 @@ public class JerryRat implements Runnable {
         while (true) {
             try (
                     Socket clientSocket = serverSocket.accept();
-                    InputStreamReader ips = new InputStreamReader(clientSocket.getInputStream());
             ) {
-                String st = readLine(ips);
+                InputStream inputStream = clientSocket.getInputStream();
+                int OOOO;
+                ArrayList<Byte> a = new ArrayList<>();
+                while ((OOOO=inputStream.read()) != -1){
+                    if (OOOO==13) {
+                        OOOO=inputStream.read();
+                        if (OOOO==10) {
+                            OOOO=inputStream.read();
+                            a.add((byte)13);
+                            a.add((byte)10);
+                            if (OOOO==13) {
+                                OOOO=inputStream.read();
+                                    break;
+                            }else{
+                                a.add((byte)OOOO);
+                            }
+                        }
+                    }else{
+                        a.add((byte)OOOO);
+                    }
+
+                }
+                byte[] bytes = new byte[a.size()];
+                for (int i = 0; i < a.size(); i++) {
+                    bytes[i] = a.get(i);
+                }
+                String bytes2String = new String(bytes, "UTF-8");
+                String[] split = bytes2String.split("\r\n",2);
+                String st = split[0];
                 while (st != null) {if (st.startsWith("GET") | st.startsWith("get") | st.startsWith("HEAD") | st.startsWith("head")) {
                         boolean ifHead = false;
                         if (st.startsWith("HEAD") | st.startsWith("head")) {
@@ -45,16 +70,12 @@ public class JerryRat implements Runnable {
                         } else {
                             s2 = s1;
                         }
-                        if (ifOld) {
-                            if (ifHead) {
-                                st = readLine(ips);
-                                continue;
-                            }
-                        }
                         if (s2.equals("/endpoints/user-agent")) {
-                            String userAgent = readLine(ips);
+                            split = split[1].split("\r\n",2);
+                            String userAgent = split[0];
                             while (!userAgent.startsWith("User-Agent")) {
-                                userAgent = readLine(ips);
+                                split = split[1].split("\r\n",2);
+                                userAgent = split[0];
                             }
                             String substring = userAgent.substring(12);
                             SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.ENGLISH);
@@ -77,11 +98,11 @@ public class JerryRat implements Runnable {
                                 fileName = file.getName();
                             }
                             String contentType;
-                            String[] split = fileName.split("\\.");
-                            if (split.length == 1) {
+                            String[] splitName = fileName.split("\\.");
+                            if (splitName.length == 1) {
                                 contentType = "text/html";
                             } else {
-                                String s3 = split[split.length - 1];
+                                String s3 = splitName[splitName.length - 1];
                                 switch (s3) {
                                     case "pdf":
                                         contentType = "application/pdf";
@@ -169,16 +190,20 @@ public class JerryRat implements Runnable {
                             if(!file.exists()){
                                 file.createNewFile();
                             }
-                            String contentLength = readLine(ips);
+                            split = split[1].split("\r\n",2);
+                            String contentLength = split[0];
                             while (!contentLength.startsWith("Content-Length")) {
-                                contentLength = readLine(ips);
+                                split = split[1].split("\r\n",2);
+                                contentLength = split[0];
                             }
-                            String[] split = contentLength.split(": ");
-                            String length = split[1];
+                            String[] splitLength = contentLength.split(": ");
+                            String length = splitLength[1];
                             int lengthNumber = Integer.parseInt(length);
-                            String black = readLine(ips);
+                            split = split[1].split("\r\n",2);
+                            String black = split[0];
                             while (!black.equals("")) {
-                                black = readLine(ips);
+                                split = split[1].split("\r\n",2);
+                                black = split[0];
                             }
                             FileOutputStream fileOutputStream = new FileOutputStream("res/webroot/null");
 
@@ -198,18 +223,23 @@ public class JerryRat implements Runnable {
                             }catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            String contentLength = readLine(ips);
+                            split = split[1].split("\r\n",2);
+                            String contentLength = split[0];
+
                             while (!contentLength.startsWith("Content-Length")&!contentLength.startsWith("Content-Type")) {
-                                contentLength = readLine(ips);
+                                split = split[1].split("\r\n",2);
+                                contentLength = split[0];
+
                             }
                             int lengthNumber = 0;
                             String type = "";
                             if (contentLength.startsWith("Content-Length")) {
-                                String[] split = contentLength.split(": ");
-                                String length = split[1];
+                                String[] splitLength = contentLength.split(": ");
+                                String length = splitLength[1];
                                 lengthNumber = Integer.parseInt(length);
                                 while (!contentLength.startsWith("Content-Type")) {
-                                    contentLength = readLine(ips);
+                                    split = split[1].split("\r\n",2);
+                                    contentLength = split[0];
                                 }
                                 String[] split1 = contentLength.split(": ");
                                 type = split1[1];
@@ -217,19 +247,17 @@ public class JerryRat implements Runnable {
                                 String[] split1 = contentLength.split(": ");
                                 type = split1[1];
                                 while (!contentLength.startsWith("Content-Length")) {
-                                    contentLength = readLine(ips);
+                                    split = split[1].split("\r\n",2);
+                                    contentLength = split[0];
                                 }
-                                String[] split = contentLength.split(": ");
-                                String length = split[1];
+                                String[] splitL = contentLength.split(": ");
+                                String length = splitL[1];
                                 lengthNumber = Integer.parseInt(length);
                             }
-                            String black = readLine(ips);
-                            while (!black.equals("")) {
-                                black = readLine(ips);
-                            }
+
                             FileOutputStream fileOutputStream = new FileOutputStream(emailFail,false);
                             for (int i = 0; i < lengthNumber ; i++) {
-                                fileOutputStream.write(ips.read());
+                                fileOutputStream.write(inputStream.read());
                             }
                             fileOutputStream.close();
                             clientSocket.getOutputStream().write(("HTTP/1.0 200 OK" + "\r\n" + "\r\n").getBytes());
@@ -237,27 +265,15 @@ public class JerryRat implements Runnable {
                     }
                     else if (st.equals("")) {
                     }
-                    st = readLine(ips);
+                    bytes = inputStream.readAllBytes();
+                    bytes2String = new String(bytes, "UTF-8");
+                    split = bytes2String.split("\r\n",2);
+                    st = split[0];
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-    }
-    public String readLine (InputStreamReader ips) throws IOException {
-        String readLine = "";
-        int lenIPS;
-        while((lenIPS=ips.read())!=-1){
-            char cr = (char)lenIPS;
-            String cr2String = String.valueOf(cr);
-            if (cr2String.equals("\r")) {
-                ips.read();
-                break;
-            }else {
-                readLine+=cr;
-            }
-        }
-        return readLine;
     }
     public static void main(String[] args) throws IOException {
         JerryRat jerryRat = new JerryRat();
