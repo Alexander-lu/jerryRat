@@ -108,7 +108,7 @@ public class JerryRat implements Runnable {
                         SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.ENGLISH);
                         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
                         String str = sdf.format(new Date());
-                        clientSocket.getOutputStream().write(("HTTP/1.0 302 Moved Temporarily" + "\r\n" + "Date: " + str + "\r\n" + "Server: Apache/11.0" + "\r\n" + "Content-Length: 0"+"\r\n"+"Location: " +"http://localhost/"+ "\r\n" + "\r\n").getBytes());
+                        clientSocket.getOutputStream().write(("HTTP/1.0 301 Moved Permanently" + "\r\n" + "Date: " + str + "\r\n" + "Server: Apache/11.0" + "\r\n" + "Content-Length: 0"+"\r\n"+"Location: " +"http://localhost/"+ "\r\n" + "\r\n").getBytes());
                     }
                     else {
                         String pathname = "res/webroot" + s2;
