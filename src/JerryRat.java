@@ -104,9 +104,8 @@ public class JerryRat implements Runnable {
                                 "" + "text/html" + ";charset=utf-8" + "\r\n" + "\r\n").getBytes());
                         clientSocket.getOutputStream().write(substring.getBytes());
                     }
-                    else if (s2.startsWith("/endpoints/redirect")){
-                        s2=s2.substring(19);
-                        String pathname = "res/webroot" + s2;
+                    else if (s2.equals("/endpoints/redirect")){
+                        String pathname = "res/webroot" +"/";
                         File file = new File(pathname);
                         String fileName = "";
                         if (file.isDirectory()) {
