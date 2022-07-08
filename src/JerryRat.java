@@ -21,11 +21,10 @@ public class JerryRat implements Runnable {
         while (true) {
             try (
                     Socket clientSocket = serverSocket.accept();
-                    BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                    InputStreamReader ips = new InputStreamReader(clientSocket.getInputStream());
             ) {
-                String st = in.readLine();
-                while (st != null) {
-                    if (st.startsWith("GET") | st.startsWith("get") | st.startsWith("HEAD") | st.startsWith("head")) {
+                String st = readLine(ips);
+                while (st != null) {if (st.startsWith("GET") | st.startsWith("get") | st.startsWith("HEAD") | st.startsWith("head")) {
                         boolean ifHead = false;
                         if (st.startsWith("HEAD") | st.startsWith("head")) {
                             ifHead = true;
@@ -48,14 +47,14 @@ public class JerryRat implements Runnable {
                         }
                         if (ifOld) {
                             if (ifHead) {
-                                st = in.readLine();
+                                st = readLine(ips);
                                 continue;
                             }
                         }
                         if (s2.equals("/endpoints/user-agent")) {
-                            String userAgent = in.readLine();
+                            String userAgent = readLine(ips);
                             while (!userAgent.startsWith("User-Agent")) {
-                                userAgent = in.readLine();
+                                userAgent = readLine(ips);
                             }
                             String substring = userAgent.substring(12);
                             SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.ENGLISH);
@@ -174,21 +173,20 @@ public class JerryRat implements Runnable {
                             if(!file.exists()){
                                 file.createNewFile();
                             }
-                            String contentLength = in.readLine();
+                            String contentLength = readLine(ips);
                             while (!contentLength.startsWith("Content-Length")) {
-                                contentLength = in.readLine();
+                                contentLength = readLine(ips);
                             }
                             String[] split = contentLength.split(": ");
                             String length = split[1];
                             int lengthNumber = Integer.parseInt(length);
-                            String black = in.readLine();
+                            String black = readLine(ips);
                             while (!black.equals("")) {
-                                black = in.readLine();
+                                black = readLine(ips);
                             }
                             FileOutputStream fileOutputStream = new FileOutputStream("res/webroot/null");
 
                             for (int i = 0; i <lengthNumber ; i++) {
-                                int read = in.read();
                             }
                             fileOutputStream.close();
                             clientSocket.getOutputStream().write(("HTTP/1.0 204 Not Content" + "\r\n" + "\r\n").getBytes());
@@ -205,39 +203,87 @@ public class JerryRat implements Runnable {
                             }catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            String contentLength = in.readLine();
-                            while (!contentLength.startsWith("Content-Length")) {
-                                contentLength = in.readLine();
+                            String contentLength = readLine(ips);
+                            while (!contentLength.startsWith("Content-Length")&!contentLength.startsWith("Content-Type")) {
+                                contentLength = readLine(ips);
                             }
-                            String[] split = contentLength.split(": ");
-                            String length = split[1];
-                            int lengthNumber = Integer.parseInt(length);
-                            String black = in.readLine();
+                            int lengthNumber = 0;
+                            String type = "";
+                            if (contentLength.startsWith("Content-Length")) {
+                                String[] split = contentLength.split(": ");
+                                String length = split[1];
+                                lengthNumber = Integer.parseInt(length);
+                                while (!contentLength.startsWith("Content-Type")) {
+                                    contentLength = readLine(ips);
+                                }
+                                String[] split1 = contentLength.split(": ");
+                                type = split1[1];
+                            }else if (contentLength.startsWith("Content-Type")) {
+                                String[] split1 = contentLength.split(": ");
+                                type = split1[1];
+                                while (!contentLength.startsWith("Content-Length")) {
+                                    contentLength = readLine(ips);
+                                }
+                                String[] split = contentLength.split(": ");
+                                String length = split[1];
+                                lengthNumber = Integer.parseInt(length);
+                            }
+                            String black = readLine(ips);
                             while (!black.equals("")) {
-                                black = in.readLine();
+                                black = readLine(ips);
                             }
-                            FileOutputStream fileOutputStream = new FileOutputStream(emailFail,true);
+                            if(type.equals("text/plain")){
+                                FileWriter fileWriter = new FileWriter(emailFail,false);
+                                for (int i = 0; i < lengthNumber ; i++) {
+                                    fileWriter.write(ips.read());
+                                }
+                                fileWriter.close();
+                            }else if (type.equals("image/png")){
+                                FileOutputStream fileOutputStream = new FileOutputStream(emailFail,false);
+                                int len;
+                                while ((len=ips.read())!=-1){
+                                    fileOutputStream.write(len);
+                                    fileOutputStream.flush();
+                                }
+                                fileOutputStream.close();
+                            }else if (type.startsWith("application")) {
+                                FileOutputStream fileOutputStream = new FileOutputStream(emailFail,false);
+                                int len;
+                                while ((len=ips.read())!=-1){
+                                    fileOutputStream.write(len);
+                                    fileOutputStream.flush();
+                                }
+                                fileOutputStream.close();
+                            }
 
-                            for (int i = 0; i <lengthNumber ; i++) {
-                                int read = in.read();
-                                fileOutputStream.write(read);
-                                fileOutputStream.flush();
-                            }
-                            fileOutputStream.close();
-                            clientSocket.getOutputStream().write(("HTTP/1.0 202 OK" + "\r\n" + "\r\n").getBytes());
+                            clientSocket.getOutputStream().write(("HTTP/1.0 200 OK" + "\r\n" + "\r\n").getBytes());
                             clientSocket.getOutputStream().flush();
                         }
                     }
                     else if (st.equals("")) {
                     }
-                    st = in.readLine();
+                    st = readLine(ips);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
-
+    public String readLine (InputStreamReader ips) throws IOException {
+        String readLine = "";
+        int lenIPS;
+        while((lenIPS=ips.read())!=-1){
+            char cr = (char)lenIPS;
+            String cr2String = String.valueOf(cr);
+            if (cr2String.equals("\r")) {
+                ips.read();
+                break;
+            }else {
+                readLine+=cr;
+            }
+        }
+        return readLine;
+    }
     public static void main(String[] args) throws IOException {
         JerryRat jerryRat = new JerryRat();
         new Thread(jerryRat).run();
