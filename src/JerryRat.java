@@ -316,8 +316,7 @@ public class JerryRat implements Runnable {
                     clientSocket.getOutputStream().write(("HTTP/1.0 400 Bad Request" + "\r\n" + "\r\n").getBytes());
                 }
 
-                    }
-                else {
+                } else {
                     clientSocket.getOutputStream().write(("HTTP/1.0 400 Bad Request" + "\r\n" + "\r\n").getBytes());
                 }
             } catch (IOException e) {
