@@ -48,7 +48,6 @@ public class JerryRat implements Runnable {
                 String bytes2String = new String(bytes, "UTF-8");
                 String[] split = bytes2String.split("\r\n",2);
                 String st = split[0];
-                while (st != null) {
                     if (st.startsWith("GET") | st.startsWith("get") | st.startsWith("HEAD") | st.startsWith("head")) {
                         boolean ifHead = false;
                         if (st.startsWith("HEAD") | st.startsWith("head")) {
@@ -285,14 +284,6 @@ public class JerryRat implements Runnable {
                         }
 
                     }
-                    bytes = new byte[a.size()];
-                    for (int i = 0; i < a.size(); i++) {
-                        bytes[i] = a.get(i);
-                    }
-                    bytes2String = new String(bytes, "UTF-8");
-                    split = bytes2String.split("\r\n",2);
-                    st = split[0];
-                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
