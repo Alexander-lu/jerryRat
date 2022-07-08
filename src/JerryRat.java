@@ -104,19 +104,11 @@ public class JerryRat implements Runnable {
                                 "" + "text/html" + ";charset=utf-8" + "\r\n" + "\r\n").getBytes());
                         clientSocket.getOutputStream().write(substring.getBytes());
                     }
-                    else if (s2.startsWith("/endpoints/redirect")){
-                        s2=s2.substring(19);
-                        String pathname;
-                        if (s2.equals("")) {
-                            pathname = "res/webroot" +"/";
-                            s2="/";
-                        }else {
-                            pathname = "res/webroot" +s2;
-                        }
+                    else if (s2.equals("/endpoints/redirect")){
                         SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.ENGLISH);
                         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
                         String str = sdf.format(new Date());
-                        clientSocket.getOutputStream().write(("HTTP/1.0 302 Moved Temporarily" + "\r\n" + "Date: " + str + "\r\n" + "Server: Apache/11.0" + "\r\n" + "Content-Length: 0"+"\r\n"+"Location: " +s2+ "\r\n" + "\r\n").getBytes());
+                        clientSocket.getOutputStream().write(("HTTP/1.0 302 Moved Temporarily" + "\r\n" + "Date: " + str + "\r\n" + "Server: Apache/11.0" + "\r\n" + "Content-Length: 0"+"\r\n"+"Location: " +"http://localhost/"+ "\r\n" + "\r\n").getBytes());
                     }
                     else {
                         String pathname = "res/webroot" + s2;
