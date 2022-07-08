@@ -224,8 +224,8 @@ public class JerryRat implements Runnable {
                                 black = split[0];
                             }
                             FileOutputStream fileOutputStream = new FileOutputStream("res/webroot/null");
-
                             for (int i = 0; i <lengthNumber ; i++) {
+                                inputStream.read();
                             }
                             fileOutputStream.close();
                             clientSocket.getOutputStream().write(("HTTP/1.0 204 Not Content" + "\r\n" + "\r\n").getBytes());
