@@ -229,88 +229,93 @@ public class JerryRat implements Runnable {
                     bytes[i] = a.get(i);
                 }
                 bytes2String = new String(bytes, "UTF-8");
-                split = bytes2String.split("\r\n",2);
-                st = split[0];
-                String afterDecode = URLDecoder.decode(st, "utf-8");
-                String deletePost = afterDecode.substring(5);
-                String url = deletePost.substring(0, deletePost.length() - 9);
-                if (url.equals("/endpoints/null")) {
-                            File file = new File("res/webroot/null");
-                            if(!file.exists()){
-                                file.createNewFile();
-                            }
+                if(bytes2String.contains("Content-Length")){
+                    split = bytes2String.split("\r\n",2);
+                    st = split[0];
+                    String afterDecode = URLDecoder.decode(st, "utf-8");
+                    String deletePost = afterDecode.substring(5);
+                    String url = deletePost.substring(0, deletePost.length() - 9);
+                    if (url.equals("/endpoints/null")) {
+                        File file = new File("res/webroot/null");
+                        if(!file.exists()){
+                            file.createNewFile();
+                        }
+                        split = split[1].split("\r\n",2);
+                        String contentLength = split[0];
+                        while (!contentLength.startsWith("Content-Length")) {
                             split = split[1].split("\r\n",2);
-                            String contentLength = split[0];
+                            contentLength = split[0];
+                        }
+                        String[] splitLength = contentLength.split(": ");
+                        String length = splitLength[1];
+                        int lengthNumber = Integer.parseInt(length);
+                        split = split[1].split("\r\n",2);
+                        String black = split[0];
+                        while (!black.equals("")) {
+                            split = split[1].split("\r\n",2);
+                            black = split[0];
+                        }
+                        FileOutputStream fileOutputStream = new FileOutputStream("res/webroot/null");
+                        for (int i = 0; i <lengthNumber ; i++) {
+                            inputStream.read();
+                        }
+                        fileOutputStream.close();
+                        clientSocket.getOutputStream().write(("HTTP/1.0 204 Not Content" + "\r\n" + "\r\n").getBytes());
+                    }else {
+                        File file = new File("res/webroot/emails");
+                        if(!file.exists()){
+                            file.mkdirs();
+                        }
+                        String realUrl = "res/webroot"+url;
+                        File emailFail = new File(realUrl);
+                        try {
+                            emailFail.createNewFile();
+                        }catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        split = split[1].split("\r\n",2);
+                        String contentLength = split[0];
+
+                        while (!contentLength.startsWith("Content-Length")&!contentLength.startsWith("Content-Type")) {
+                            split = split[1].split("\r\n",2);
+                            contentLength = split[0];
+
+                        }
+                        int lengthNumber = 0;
+                        String type = "";
+                        if (contentLength.startsWith("Content-Length")) {
+                            String[] splitLength = contentLength.split(": ");
+                            String length = splitLength[1];
+                            lengthNumber = Integer.parseInt(length);
+                            while (!contentLength.startsWith("Content-Type")) {
+                                split = split[1].split("\r\n",2);
+                                contentLength = split[0];
+                            }
+                            String[] split1 = contentLength.split(": ");
+                            type = split1[1];
+                        }else if (contentLength.startsWith("Content-Type")) {
+                            String[] split1 = contentLength.split(": ");
+                            type = split1[1];
                             while (!contentLength.startsWith("Content-Length")) {
                                 split = split[1].split("\r\n",2);
                                 contentLength = split[0];
                             }
-                            String[] splitLength = contentLength.split(": ");
-                            String length = splitLength[1];
-                            int lengthNumber = Integer.parseInt(length);
-                            split = split[1].split("\r\n",2);
-                            String black = split[0];
-                            while (!black.equals("")) {
-                                split = split[1].split("\r\n",2);
-                                black = split[0];
-                            }
-                            FileOutputStream fileOutputStream = new FileOutputStream("res/webroot/null");
-                            for (int i = 0; i <lengthNumber ; i++) {
-                                inputStream.read();
-                            }
-                            fileOutputStream.close();
-                            clientSocket.getOutputStream().write(("HTTP/1.0 204 Not Content" + "\r\n" + "\r\n").getBytes());
-                        }else {
-                            File file = new File("res/webroot/emails");
-                            if(!file.exists()){
-                                file.mkdirs();
-                            }
-                            String realUrl = "res/webroot"+url;
-                            File emailFail = new File(realUrl);
-                            try {
-                                emailFail.createNewFile();
-                            }catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            split = split[1].split("\r\n",2);
-                            String contentLength = split[0];
-
-                            while (!contentLength.startsWith("Content-Length")&!contentLength.startsWith("Content-Type")) {
-                                split = split[1].split("\r\n",2);
-                                contentLength = split[0];
-
-                            }
-                            int lengthNumber = 0;
-                            String type = "";
-                            if (contentLength.startsWith("Content-Length")) {
-                                String[] splitLength = contentLength.split(": ");
-                                String length = splitLength[1];
-                                lengthNumber = Integer.parseInt(length);
-                                while (!contentLength.startsWith("Content-Type")) {
-                                    split = split[1].split("\r\n",2);
-                                    contentLength = split[0];
-                                }
-                                String[] split1 = contentLength.split(": ");
-                                type = split1[1];
-                            }else if (contentLength.startsWith("Content-Type")) {
-                                String[] split1 = contentLength.split(": ");
-                                type = split1[1];
-                                while (!contentLength.startsWith("Content-Length")) {
-                                    split = split[1].split("\r\n",2);
-                                    contentLength = split[0];
-                                }
-                                String[] splitL = contentLength.split(": ");
-                                String length = splitL[1];
-                                lengthNumber = Integer.parseInt(length);
-                            }
-
-                            FileOutputStream fileOutputStream = new FileOutputStream(emailFail,false);
-                            for (int i = 0; i < lengthNumber ; i++) {
-                                fileOutputStream.write(inputStream.read());
-                            }
-                            fileOutputStream.close();
-                            clientSocket.getOutputStream().write(("HTTP/1.0 200 OK" + "\r\n" + "\r\n").getBytes());
+                            String[] splitL = contentLength.split(": ");
+                            String length = splitL[1];
+                            lengthNumber = Integer.parseInt(length);
                         }
+
+                        FileOutputStream fileOutputStream = new FileOutputStream(emailFail,false);
+                        for (int i = 0; i < lengthNumber ; i++) {
+                            fileOutputStream.write(inputStream.read());
+                        }
+                        fileOutputStream.close();
+                        clientSocket.getOutputStream().write(("HTTP/1.0 200 OK" + "\r\n" + "\r\n").getBytes());
+                    }
+                }else {
+                    clientSocket.getOutputStream().write(("HTTP/1.0 400 Bad Request" + "\r\n" + "\r\n").getBytes());
+                }
+
                     }
                 else {
                     clientSocket.getOutputStream().write(("HTTP/1.0 400 Bad Request" + "\r\n" + "\r\n").getBytes());
