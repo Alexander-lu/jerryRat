@@ -65,7 +65,6 @@ public class JerryRat implements Runnable {
                                     "Content-Length: " + substring.length() + "\r\n" + "Content-Type: " +
                                     "" + "text/html" + ";charset=utf-8" + "\r\n" + "\r\n").getBytes());
                             clientSocket.getOutputStream().write(substring.getBytes());
-                            clientSocket.getOutputStream().flush();
                         } else {
                             String pathname = "res/webroot" + s2;
                             File file = new File(pathname);
@@ -144,20 +143,17 @@ public class JerryRat implements Runnable {
                                 long length = fileLastTime.length();
                                 if (!ifOld) {
                                     clientSocket.getOutputStream().write(("HTTP/1.0 200 OK" + "\r\n" + "Date: " + str + "\r\n" + "Server: Apache/11.0" + "\r\n" + "Content-Length: " + length + "\r\n" + "Content-Type: " + contentType + ";charset=utf-8" + "\r\n" + "Last-Modified: " + sdf.format(new Date(l)) + "\r\n" + "\r\n").getBytes());
-                                    clientSocket.getOutputStream().flush();
                                 }
                                 byte[] chs = new byte[1024];
                                 int len;
                                 while ((len = fr.read(chs)) != -1) {
                                     if (!ifHead) {
                                         clientSocket.getOutputStream().write(chs, 0, len);
-                                        clientSocket.getOutputStream().flush();
                                     }
                                 }
                                 fr.close();
                             } catch (FileNotFoundException e) {
                                 clientSocket.getOutputStream().write(("HTTP/1.0 404 Not Found" + "\r\n" + "\r\n").getBytes());
-                                clientSocket.getOutputStream().flush();
                                 e.printStackTrace();
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -190,7 +186,6 @@ public class JerryRat implements Runnable {
                             }
                             fileOutputStream.close();
                             clientSocket.getOutputStream().write(("HTTP/1.0 204 Not Content" + "\r\n" + "\r\n").getBytes());
-                            clientSocket.getOutputStream().flush();
                         }else {
                             File file = new File("res/webroot/emails");
                             if(!file.exists()){
@@ -238,7 +233,6 @@ public class JerryRat implements Runnable {
                             }
                             fileOutputStream.close();
                             clientSocket.getOutputStream().write(("HTTP/1.0 200 OK" + "\r\n" + "\r\n").getBytes());
-                            clientSocket.getOutputStream().flush();
                         }
                     }
                     else if (st.equals("")) {
