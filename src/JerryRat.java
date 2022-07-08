@@ -262,28 +262,6 @@ public class JerryRat implements Runnable {
                             clientSocket.getOutputStream().write(("HTTP/1.0 200 OK" + "\r\n" + "\r\n").getBytes());
                         }
                     }
-                    else if (st.equals("")) {
-                    }
-                    a = new ArrayList<>();
-                    while ((OOOO=inputStream.read()) != -1){
-                        if (OOOO==13) {
-                            OOOO=inputStream.read();
-                            if (OOOO==10) {
-                                OOOO=inputStream.read();
-                                a.add((byte)13);
-                                a.add((byte)10);
-                                if (OOOO==13) {
-                                    OOOO=inputStream.read();
-                                    break;
-                                }else{
-                                    a.add((byte)OOOO);
-                                }
-                            }
-                        }else{
-                            a.add((byte)OOOO);
-                        }
-
-                    }
             } catch (IOException e) {
                 e.printStackTrace();
             }
