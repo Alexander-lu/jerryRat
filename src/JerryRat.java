@@ -104,99 +104,19 @@ public class JerryRat implements Runnable {
                                 "" + "text/html" + ";charset=utf-8" + "\r\n" + "\r\n").getBytes());
                         clientSocket.getOutputStream().write(substring.getBytes());
                     }
-                    else if (s2.equals("/endpoints/redirect")){
-                        String pathname = "res/webroot" +"/";
-                        File file = new File(pathname);
-                        String fileName = "";
-                        if (file.isDirectory()) {
-                            pathname = "res/webroot" + s2 + "/index.html";
-                            File file1 = new File(pathname);
-                            fileName = file1.getName();
-                        } else {
-                            fileName = file.getName();
+                    else if (s2.startsWith("/endpoints/redirect")){
+                        s2=s2.substring(19);
+                        String pathname;
+                        if (s2.equals("")) {
+                            pathname = "res/webroot" +"/";
+                            s2="/";
+                        }else {
+                            pathname = "res/webroot" +s2;
                         }
-                        String contentType;
-                        String[] splitName = fileName.split("\\.");
-                        if (splitName.length == 1) {
-                            contentType = "text/html";
-                        } else {
-                            String s3 = splitName[splitName.length - 1];
-                            switch (s3) {
-                                case "pdf":
-                                    contentType = "application/pdf";
-                                    break;
-                                case "ai":
-                                    contentType = "application/postscript";
-                                    break;
-                                case "xml":
-                                    contentType = "application/atom+xml";
-                                    break;
-                                case "json":
-                                    contentType = "application/json";
-                                    break;
-                                case "doc":
-                                    contentType = "application/msword";
-                                    break;
-                                case "js":
-                                    contentType = "application/javascript";
-                                    break;
-                                case "css":
-                                    contentType = "text/css";
-                                    break;
-                                case "html":
-                                    contentType = "text/html";
-                                    break;
-                                case "jpg":
-                                    contentType = "image/jpeg";
-                                    break;
-                                case "tiff":
-                                    contentType = "image/tiff";
-                                    break;
-                                case "gif":
-                                    contentType = "image/gif";
-                                    break;
-                                case "png":
-                                    contentType = "image/png";
-                                    break;
-                                case "jpeg":
-                                    contentType = "image/jpeg";
-                                    break;
-                                case "wbmp":
-                                    contentType = "image/vnd.wap.wbmp";
-                                    break;
-                                case "jpe":
-                                    contentType = "image/jpeg";
-                                    break;
-                                default:
-                                    contentType = "text/html";
-                                    break;
-                            }
-                        }
-                        try {
-                            FileInputStream fr = new FileInputStream(pathname);
-                            SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.ENGLISH);
-                            sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-                            String str = sdf.format(new Date());
-                            File fileLastTime = new File(pathname);
-                            long l = fileLastTime.lastModified();
-                            long length = fileLastTime.length();
-                            if (!ifOld) {
-                                clientSocket.getOutputStream().write(("HTTP/1.0 302 Moved Temporarily" + "\r\n" + "Date: " + str + "\r\n" + "Server: Apache/11.0" + "\r\n" + "Content-Length: " + length + "\r\n" + "Content-Type: " + contentType + ";charset=utf-8" + "\r\n" + "Last-Modified: " + sdf.format(new Date(l)) + "\r\n" + "Location: " +"/"+ "\r\n" + "\r\n").getBytes());
-                            }
-                            byte[] chs = new byte[1024];
-                            int len;
-                            while ((len = fr.read(chs)) != -1) {
-                                if (!ifHead) {
-                                    clientSocket.getOutputStream().write(chs, 0, len);
-                                }
-                            }
-                            fr.close();
-                        } catch (FileNotFoundException e) {
-                            clientSocket.getOutputStream().write(("HTTP/1.0 404 Not Found" + "\r\n" + "\r\n").getBytes());
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.ENGLISH);
+                        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+                        String str = sdf.format(new Date());
+                        clientSocket.getOutputStream().write(("HTTP/1.0 302 Moved Temporarily" + "\r\n" + "Date: " + str + "\r\n" + "Server: Apache/11.0" + "\r\n" + "Content-Length: "+"\r\n"+"Location: " +s2+ "\r\n" + "\r\n").getBytes());
                     }
                     else {
                         String pathname = "res/webroot" + s2;
