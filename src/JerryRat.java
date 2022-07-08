@@ -20,9 +20,9 @@ public class JerryRat implements Runnable {
             try (
                     Socket clientSocket = serverSocket.accept();
             ) {
+                ArrayList<Byte> a = new ArrayList<>();
                 InputStream inputStream = clientSocket.getInputStream();
                 int OOOO;
-                ArrayList<Byte> a = new ArrayList<>();
                 while ((OOOO=inputStream.read()) != -1){
                     if (OOOO==13) {
                         OOOO=inputStream.read();
@@ -40,7 +40,6 @@ public class JerryRat implements Runnable {
                     }else{
                         a.add((byte)OOOO);
                     }
-
                 }
                 byte[] bytes = new byte[a.size()];
                 for (int i = 0; i < a.size(); i++) {
@@ -49,7 +48,8 @@ public class JerryRat implements Runnable {
                 String bytes2String = new String(bytes, "UTF-8");
                 String[] split = bytes2String.split("\r\n",2);
                 String st = split[0];
-                while (st != null) {if (st.startsWith("GET") | st.startsWith("get") | st.startsWith("HEAD") | st.startsWith("head")) {
+                while (st != null) {
+                    if (st.startsWith("GET") | st.startsWith("get") | st.startsWith("HEAD") | st.startsWith("head")) {
                         boolean ifHead = false;
                         if (st.startsWith("HEAD") | st.startsWith("head")) {
                             ifHead = true;
@@ -265,7 +265,30 @@ public class JerryRat implements Runnable {
                     }
                     else if (st.equals("")) {
                     }
-                    bytes = inputStream.readAllBytes();
+                    a = new ArrayList<>();
+                    while ((OOOO=inputStream.read()) != -1){
+                        if (OOOO==13) {
+                            OOOO=inputStream.read();
+                            if (OOOO==10) {
+                                OOOO=inputStream.read();
+                                a.add((byte)13);
+                                a.add((byte)10);
+                                if (OOOO==13) {
+                                    OOOO=inputStream.read();
+                                    break;
+                                }else{
+                                    a.add((byte)OOOO);
+                                }
+                            }
+                        }else{
+                            a.add((byte)OOOO);
+                        }
+
+                    }
+                    bytes = new byte[a.size()];
+                    for (int i = 0; i < a.size(); i++) {
+                        bytes[i] = a.get(i);
+                    }
                     bytes2String = new String(bytes, "UTF-8");
                     split = bytes2String.split("\r\n",2);
                     st = split[0];
