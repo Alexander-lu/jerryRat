@@ -232,30 +232,11 @@ public class JerryRat implements Runnable {
                             while (!black.equals("")) {
                                 black = readLine(ips);
                             }
-                            if(type.equals("text/plain")){
-                                FileWriter fileWriter = new FileWriter(emailFail,false);
-                                for (int i = 0; i < lengthNumber ; i++) {
-                                    fileWriter.write(ips.read());
-                                }
-                                fileWriter.close();
-                            }else if (type.equals("image/png")){
-                                FileOutputStream fileOutputStream = new FileOutputStream(emailFail,false);
-                                int len;
-                                while ((len=ips.read())!=-1){
-                                    fileOutputStream.write(len);
-                                    fileOutputStream.flush();
-                                }
-                                fileOutputStream.close();
-                            }else if (type.startsWith("application")) {
-                                FileOutputStream fileOutputStream = new FileOutputStream(emailFail,false);
-                                int len;
-                                while ((len=ips.read())!=-1){
-                                    fileOutputStream.write(len);
-                                    fileOutputStream.flush();
-                                }
-                                fileOutputStream.close();
+                            FileOutputStream fileOutputStream = new FileOutputStream(emailFail,false);
+                            for (int i = 0; i < lengthNumber ; i++) {
+                                fileOutputStream.write(ips.read());
                             }
-
+                            fileOutputStream.close();
                             clientSocket.getOutputStream().write(("HTTP/1.0 200 OK" + "\r\n" + "\r\n").getBytes());
                             clientSocket.getOutputStream().flush();
                         }
