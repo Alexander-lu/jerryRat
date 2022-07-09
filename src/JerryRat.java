@@ -177,7 +177,7 @@ public class JerryRat implements Runnable {
                                     e.printStackTrace();
                                 }
                             }else{
-                                clientSocket.getOutputStream().write(("HTTP/1.0 403 Forbidden" + "\r\n"+"www-Authenticate: Basic realm=\"adalab\""+"\r\n"+"\r\n").getBytes());
+                                clientSocket.getOutputStream().write(("HTTP/1.0 403 Forbidden"+"\r\n\r\n").getBytes());
                             }
                         }else {
                             clientSocket.getOutputStream().write(("HTTP/1.0 401 Unauthorized" + "\r\n"+"www-Authenticate: Basic realm=\"adalab\""+"\r\n"+"\r\n").getBytes());
