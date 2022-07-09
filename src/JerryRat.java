@@ -110,6 +110,79 @@ public class JerryRat implements Runnable {
                         String str = sdf.format(new Date());
                         clientSocket.getOutputStream().write(("HTTP/1.0 301 Moved Permanently" + "\r\n" + "Date: " + str + "\r\n" + "Server: Apache/11.0" + "\r\n" + "Content-Length: 0"+"\r\n"+"Location: " +"http://localhost/"+ "\r\n" + "\r\n").getBytes());
                     }
+                    else if (s2.equals("/secret.txt")){
+                        while ((OOOO=inputStream.read()) != -1){
+                            if (OOOO==13) {
+                                OOOO=inputStream.read();
+                                if (OOOO==10) {
+                                    OOOO=inputStream.read();
+                                    a.add((byte)13);
+                                    a.add((byte)10);
+                                    if (OOOO==13) {
+                                        OOOO=inputStream.read();
+                                        break;
+                                    }else{
+                                        a.add((byte)OOOO);
+                                    }
+                                }
+                            }else{
+                                a.add((byte)OOOO);
+                            }
+                        }
+                        bytes = new byte[a.size()];
+                        for (int i = 0; i < a.size(); i++) {
+                            bytes[i] = a.get(i);
+                        }
+                        bytes2String = new String(bytes, "UTF-8");
+                        String  authorization = "";
+                        if (bytes2String.contains("Authorization")) {
+                            split = bytes2String.split("\r\n", 2);
+                            authorization = split[0];
+                            while (!authorization.startsWith("Authorization")) {
+                                split = split[1].split("\r\n",2);
+                                authorization = split[0];
+                            }
+                            String[] authorizationsuzu = authorization.split(": ");
+                            String basic = authorizationsuzu[1];
+                            String[] s3 = basic.split(" ");
+                            String rawHmac = s3[1];
+                            byte[] decode = Base64.getDecoder().decode(rawHmac);
+                            String rawHmacBytesDecode = new String(decode);
+                            if(rawHmacBytesDecode.equals("hello:world")){
+                                String pathname = "res/webroot/sercet.txt";
+                                String contentType= "text/html";
+                                try {
+                                    FileInputStream fr = new FileInputStream(pathname);
+                                    SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.ENGLISH);
+                                    sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+                                    String str = sdf.format(new Date());
+                                    File fileLastTime = new File(pathname);
+                                    long l = fileLastTime.lastModified();
+                                    long length = fileLastTime.length();
+                                    if (!ifOld) {
+                                        clientSocket.getOutputStream().write(("HTTP/1.0 200 OK" + "\r\n" + "Date: " + str + "\r\n" + "Server: Apache/11.0" + "\r\n" + "Content-Length: " + length + "\r\n" + "Content-Type: " + contentType + ";charset=utf-8" + "\r\n" + "Last-Modified: " + sdf.format(new Date(l)) + "\r\n" + "\r\n").getBytes());
+                                    }
+                                    byte[] chs = new byte[1024];
+                                    int len;
+                                    while ((len = fr.read(chs)) != -1) {
+                                        if (!ifHead) {
+                                            clientSocket.getOutputStream().write(chs, 0, len);
+                                        }
+                                    }
+                                    fr.close();
+                                } catch (FileNotFoundException e) {
+                                    clientSocket.getOutputStream().write(("HTTP/1.0 404 Not Found" + "\r\n" + "\r\n").getBytes());
+                                    e.printStackTrace();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }else{
+                                clientSocket.getOutputStream().write(("HTTP/1.0 401 Unauthorized" + "\r\n"+"www-Authenticate: Basic realm=\"adalab\""+"\r\n"+"\r\n").getBytes());
+                            }
+                        }else {
+                            clientSocket.getOutputStream().write(("HTTP/1.0 401 Unauthorized" + "\r\n"+"www-Authenticate: Basic realm=\"adalab\""+"\r\n"+"\r\n").getBytes());
+                        }
+                    }
                     else {
                         String pathname = "res/webroot" + s2;
                         File file = new File(pathname);
