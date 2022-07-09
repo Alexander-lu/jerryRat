@@ -149,7 +149,7 @@ public class JerryRat implements Runnable {
                             byte[] decode = Base64.getDecoder().decode(rawHmac);
                             String rawHmacBytesDecode = new String(decode);
                             if(rawHmacBytesDecode.equals("hello:world")){
-                                String pathname = "res/webroot/sercet.txt";
+                                String pathname = "res/webroot/secret.txt";
                                 String contentType= "text/html";
                                 try {
                                     FileInputStream fr = new FileInputStream(pathname);
